@@ -1,0 +1,84 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../shared/shared-visjs.html">
+
+<dom-module id="leboucher-graph">
+    <template>
+        <style>
+            #graph {
+                width: 100%;
+                height: 800px;
+                border: 1px solid lightgray;
+            }
+        </style>
+
+        <div id="graph">
+
+        </div>
+
+        <div on-tap="_buttonClick">Click me!</div>
+
+    </template>
+
+    <script>
+        Polymer({
+            is: 'leboucher-graph',
+            properties: {
+                data: {
+                    type: Object,
+                    value: undefined,
+                    observer: "_dataChanged"
+                }
+            },
+
+            _dataChanged: function(newValue) {
+
+                if (newValue === undefined) {
+                    return;
+                }
+
+                newValue.edges.forEach(function(element) {
+                    element.arrows = "to";
+                    element.length = 200;
+                }, this);
+
+                this._data = {
+                    nodes: new vis.DataSet(newValue.nodes),
+                    edges: new vis.DataSet(newValue.edges)
+                };
+
+                var options = {
+                    physics: {
+                        enabled: false
+                    },
+                    nodes: {
+                        borderWidth: 3,
+                        size: 50,
+                        color: {
+                            border: '#222222',
+                            background: '#666666'
+                        },
+                        font: {
+                            color: 'black'
+                        }
+                    },
+                    edges: {
+                        color: 'darkgray'
+                    }
+                };
+
+                this.network = new vis.Network(this.$.graph, this._data, options);
+                this.network.on("select", this._nodeSelected.bind(this));
+            },
+
+            _nodeSelected: function(params){
+                console.log('select Event:', params);
+            },
+
+            _buttonClick: function(){
+                console.log("I was pressed");
+                console.log(this.network.getPositions(this._data.nodes.map(function(e){ return e.id;})));
+            }
+        });
+    </script>
+
+</dom-module>
