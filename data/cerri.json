@@ -1,0 +1,212 @@
+{
+    "nodes": [
+
+        {
+            "id": "quartaParry",
+            "label": "Quarta parry",
+            "image": "images/quartaParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "terzaParry",
+            "label": "Terza parry",
+            "image": "images/terzaParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "cerchioParry",
+            "label": "Cerchio parry",
+            "image": "images/cerchioParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "secondaParry",
+            "label": "Seconda parry",
+            "image": "images/secondaParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "primaParry",
+            "label": "Prima parry",
+            "image": "images/primaParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "lowQuartaParry",
+            "label": "Low Quarta parry",
+            "image": "images/lowQuartaParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "lowTerzaParry",
+            "label": "Low Terza parry",
+            "image": "images/lowTerzaParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "highPrimaParry",
+            "label": "High Prima parry",
+            "image": "images/highPrimaParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "highSecondaParry",
+            "label": "High Seconda parry",
+            "image": "images/highSecondaParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "falseSecondaParry",
+            "label": "False Seconda parry",
+            "image": "images/falseSecondaParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "falsePrimaParry",
+            "label": "False Prima parry",
+            "image": "images/falsePrimaParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "falseHeadParry",
+            "label": "False Head parry",
+            "image": "images/falseHeadParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "falseSecondaHandsInPrimaParry",
+            "label": "False seconda with the hands in Prima parry",
+            "image": "images/falseSecondaHandsInPrimaParry-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "falseParryOfMontante",
+            "label": "False parry of montante",
+            "image": "images/falseParryOfMontante-small.png",
+            "type": "parry"
+        },
+        {
+            "id": "insideHeadBlow",
+            "label": "Inside head blow",
+            "image": "images/insideHeadBlow-small.png",
+            "type": "attack"
+        },
+        {
+            "id": "outsideHeadBlow",
+            "label": "Outside head blow",
+            "image": "images/outsideHeadBlow-small.png",
+            "type": "attack"
+        },
+        {
+            "id": "insideFaceBlow",
+            "label": "Inside face blow",
+            "image": "images/insideFaceBlow-small.png",
+            "type": "attack"
+        }, {
+            "id": "outsideFaceBlow",
+            "label": "Outside face blow",
+            "image": "images/outsideFaceBlow-small.png",
+            "type": "attack"
+        }, {
+            "id": "insideFlankBlow",
+            "label": "Inside flank blow",
+            "image": "images/insideFlankBlow-small.png",
+            "type": "attack"
+        }, {
+            "id": "outsideFlankBlow",
+            "label": "Outside flank blow",
+            "image": "images/outsideFlankBlow-small.png",
+            "type": "attack"
+        }, {
+            "id": "insideLegBlow",
+            "label": "Inside leg blow",
+            "image": "images/insideLegBlow-small.png",
+            "type": "attack"
+        }, {
+            "id": "outsideLegBlow",
+            "label": "Outside leg blow",
+            "image": "images/outsideLegBlow-small.png",
+            "type": "attack"
+        }, {
+            "id": "insideMontanteBlow",
+            "label": "Inside montante blow",
+            "image": "images/insideMontanteBlow-small.png",
+            "type": "attack"
+        },
+        {
+            "id": "outsideMontanteBlow",
+            "label": "Outside montante blow",
+            "image": "images/outsideMontanteBlow-small.png",
+            "type": "attack"
+        },
+        {
+            "id": "thrust",
+            "label": "Thrust",
+            "image": "images/thrust-small.png",
+            "type": "attack"
+        }, {
+            "id": "reverseBlow",
+            "label": "Reverse blow",
+            "image": "images/reverseBlow-small.png",
+            "type": "attack"
+        }
+    ],
+    "edges": [{
+            "from": "quartaParry",
+            "toList": ["insideHeadBlow", "outsideHeadBlow", "insideFaceBlow", "outsideFaceBlow", "insideFlankBlow", "outsideFlankBlow", "insideLegBlow", "outsideLegBlow", "insideMontanteBlow", "outsideMontanteBlow"]
+        },
+        {
+            "from": "terzaParry",
+            "toList": ["insideHeadBlow", "outsideHeadBlow", "insideFaceBlow", "outsideFaceBlow", "insideFlankBlow", "outsideFlankBlow", "insideLegBlow", "outsideLegBlow", "insideMontanteBlow", "outsideMontanteBlow"]
+        },
+        {
+            "from": "cerchioParry",
+            "toList": ["outsideHeadBlow", "insideFaceBlow", "insideFlankBlow", "insideLegBlow", { "name": "insideMontanteBlow", "comment": "with left leg advancing" }]
+        },
+        {
+            "from": "secondaParry",
+            "toList": ["outsideHeadBlow", "insideFaceBlow", "insideFlankBlow", "insideLegBlow", "insideMontanteBlow"]
+        },
+        {
+            "from": "primaParry",
+            "toList": ["insideHeadBlow", "outsideMontanteBlow", "outsideFaceBlow", "outsideFlankBlow", "outsideLegBlow"]
+        },
+        {
+            "from": "lowQuartaParry",
+            "toList": ["insideHeadBlow", "outsideHeadBlow", "insideFaceBlow", "outsideFaceBlow", "insideFlankBlow", "outsideFlankBlow", "insideLegBlow", "outsideLegBlow", "insideMontanteBlow", "outsideMontanteBlow"]
+        },
+        {
+            "from": "lowTerzaParry",
+            "toList": ["insideHeadBlow", "outsideHeadBlow", "insideFaceBlow", "outsideFaceBlow", "insideFlankBlow", "outsideFlankBlow", "insideLegBlow", "outsideLegBlow", "insideMontanteBlow", "outsideMontanteBlow"]
+        },
+        {
+            "from": "highSecondaParry",
+            "toList": ["outsideFaceBlow", "insideFaceBlow", "insideFlankBlow", "insideLegBlow", { "name": "insideMontanteBlow", "comment": "with left leg advancing" }]
+        },
+        {
+            "from": "highPrimaParry",
+            "toList": ["insideHeadBlow", "outsideFaceBlow", "outsideFlankBlow", "outsideLegBlow", "outsideMontanteBlow"]
+        },
+        {
+            "from": "falseSecondaParry",
+            "toList": ["insideFaceBlow", "outsideFaceBlow", "insideFlankBlow", "outsideFlankBlow", "insideLegBlow", "outsideLegBlow", { "name": "insideMontanteBlow", "comment": "right leg forward" }, "thrust", { "name": "reverseBlow", "comment": "thrust + reverse blow" }]
+        },
+        {
+            "from": "falsePrimaParry",
+            "toList": ["outsideHeadBlow", "insideFaceBlow", "insideFlankBlow", "insideLegBlow", "insideMontanteBlow"]
+        },
+        {
+            "from": "falseHeadParry",
+            "toList": ["insideHeadBlow", "outsideHeadBlow", "insideFaceBlow", "outsideFaceBlow", "insideFlankBlow", "outsideFlankBlow", "insideLegBlow", "outsideLegBlow", "insideMontanteBlow", "outsideMontanteBlow"]
+        },
+        {
+            "from": "falseSecondaHandsInPrimaParry",
+            "toList": ["outsideHeadBlow", "outsideFaceBlow", "outsideFlankBlow", "outsideLegBlow", "outsideMontanteBlow"]
+        },
+        {
+            "from": "falseParryOfMontante",
+            "toList": ["outsideHeadBlow", "insideFaceBlow", "insideFlankBlow", "insideLegBlow", "insideMontanteBlow"]
+        }
+
+    ]
+}
