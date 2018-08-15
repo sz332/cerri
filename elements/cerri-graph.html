@@ -30,11 +30,40 @@
                 }
             },
 
+            _processData: function(newValue) {
+                let data = {};
+
+                data.nodes = newValue.nodes;
+                data.edges = [];
+
+                for (let item of newValue.edges) {
+                    for (let toNode of item.toList) {
+
+                        if (typeof toNode === 'string' || toNode instanceof String) {
+                            data.edges.push({
+                                "from": item.from,
+                                "to": toNode
+                            });
+                        } else {
+                            data.edges.push({
+                                "from": item.from,
+                                "to": toNode.name
+                            });
+                        }
+
+                    }
+                }
+
+                return data;
+            },
+
             _dataChanged: function(newValue) {
 
                 if (newValue === undefined) {
                     return;
                 }
+
+                newValue = this._processData(newValue);
 
                 newValue.edges.forEach(function(element) {
                     element.arrows = "to";
@@ -70,13 +99,15 @@
                 this.network.on("select", this._nodeSelected.bind(this));
             },
 
-            _nodeSelected: function(params){
+            _nodeSelected: function(params) {
                 console.log('select Event:', params);
             },
 
-            _buttonClick: function(){
+            _buttonClick: function() {
                 console.log("I was pressed");
-                console.log(this.network.getPositions(this._data.nodes.map(function(e){ return e.id;})));
+                console.log(this.network.getPositions(this._data.nodes.map(function(e) {
+                    return e.id;
+                })));
             }
         });
     </script>

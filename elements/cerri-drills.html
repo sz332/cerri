@@ -181,6 +181,33 @@
                     return node.id === id;
                 }).image;
             },
+            
+            _processData: function(newValue) {
+                let data = {};
+
+                data.nodes = newValue.nodes;
+                data.edges = [];
+
+                for (let item of newValue.edges) {
+                    for (let toNode of item.toList) {
+
+                        if (typeof toNode === 'string' || toNode instanceof String) {
+                            data.edges.push({
+                                "from": item.from,
+                                "to": toNode
+                            });
+                        } else {
+                            data.edges.push({
+                                "from": item.from,
+                                "to": toNode.name
+                            });
+                        }
+
+                    }
+                }
+
+                return data;
+            },
 
             _dataChanged: function(newValue) {
 
@@ -188,7 +215,9 @@
                     return;
                 }
 
-                var result = GraphLibrary.orderedCycles(this.data.nodes, this.data.edges);
+                newValue = this._processData(newValue);
+
+                var result = GraphLibrary.orderedCycles(newValue.nodes, newValue.edges);
 
                 result.forEach(function(r) {
                     r.header = this._generateHeader(r.length);
@@ -196,7 +225,7 @@
 
                 this.tables = result;
 
-                var minimalCycles = GraphLibrary.minialCoveringCycles(result, this.data.edges);
+                var minimalCycles = GraphLibrary.minialCoveringCycles(result, newValue.edges);
 
                 minimalCycles.paths.forEach(function(r) {
                     r.header = this._generateHeader(r.length);
