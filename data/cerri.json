@@ -205,8 +205,48 @@
         },
         {
             "from": "falseParryOfMontante",
-            "toList": ["outsideHeadBlow", "insideFaceBlow", "insideFlankBlow", "insideLegBlow", "insideMontanteBlow"]
+            "toList": ["outsideHeadBlow", "insideFaceBlow", "insideFlankBlow", "insideLegBlow", "insideMontanteBlow"],
+            "comment": "From here comes my ideas which attack shall go against which parry"
+        }, {
+            "from": "insideHeadBlow",
+            "toList": ["highPrimaParry", "highSecondaParry", "falseHeadParry"]
+        }, {
+            "from": "outsideHeadBlow",
+            "toList": ["highPrimaParry","highSecondaParry", "falseHeadParry"]
+        }, {
+            "from": "insideFaceBlow",
+            "toList": ["terzaParry","secondaParry", "falseSecondaParry"]
+        }, {
+            "from": "outsideFaceBlow",
+            "toList": ["quartaParry","cerchioParry", "falsePrimaParry"]
+        }, {
+            "from": "insideFlankBlow",
+            "toList": ["terzaParry", "secondaParry", "lowTerzaParry", "falseSecondaParry", "falseSecondaHandsInPrimaParry"]
+        }, {
+            "from": "outsideFlankBlow",
+            "toList": ["quartaParry", "cerchioParry", "primaParry", "lowQuartaParry", "falsePrimaParry"]
+        }, {
+            "from": "insideLegBlow",
+            "toList": ["secondaParry", "lowTerzaParry", "falseSecondaHandsInPrimaParry"]
+        }, {
+            "from": "outsideLegBlow",
+            "toList": ["cerchioParry", "primaParry", "lowQuartaParry"]
+        }, {
+            "from": "insideMontanteBlow",
+            "toList": ["terzaParry", "secondaParry", "lowTerzaParry", "falseParryOfMontante"]
+        }, {
+            "from": "outsideMontanteBlow",
+            "toList": ["quartaBlow", "cerchioParry", "lowQuartaParry", "falseParryOfMontante"]
+        }, {
+            "from": "thrust",
+            "toList": ["quartaParry", "terzaParry"]
+        }, {
+            "from": "reverseBlow",
+            "toList": ["highPrimaParry", "highSecondaParry", "falseHeadParry"]
         }
-
-    ]
+    ],
+    "comments": [
+        "attacks made from the point of the attacker, not the receiver",
+        "cerchioParry of outsideFaceBlow and secondaParry of inside face blow is questionable, the second is mentioned in the book",
+        ""]
 }
