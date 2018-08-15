@@ -32,7 +32,7 @@ var GraphLibrary = (function() {
     var cycleRecursive = function(current, nodes, edges, path, result) {
 
         // if the path is too long, we will skip it, we don't need cycles consisting of more than 8 exercises
-        if (path.length > 8){
+        if (path.length > 6){
             return;
         }
 
