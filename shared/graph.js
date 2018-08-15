@@ -31,10 +31,18 @@ var GraphLibrary = (function() {
 
     var cycleRecursive = function(current, nodes, edges, path, result) {
 
+        // if the path is too long, we will skip it, we don't need cycles consisting of more than 8 exercises
+        if (path.length > 8){
+            return;
+        }
+
         if (path.length > 0) {
 
             // we found a current, self-returning circle
             if (path[0] === current.id) {
+
+                console.info("Found a cycle, path = " + path + " # of cycles = " + result.length);
+
                 path.push(current.id);
                 result.push(path);
                 return;

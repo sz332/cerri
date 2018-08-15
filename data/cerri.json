@@ -236,7 +236,7 @@
             "toList": ["terzaParry", "secondaParry", "lowTerzaParry", "falseParryOfMontante"]
         }, {
             "from": "outsideMontanteBlow",
-            "toList": ["quartaBlow", "cerchioParry", "lowQuartaParry", "falseParryOfMontante"]
+            "toList": ["quartaParry", "cerchioParry", "lowQuartaParry", "falseParryOfMontante"]
         }, {
             "from": "thrust",
             "toList": ["quartaParry", "terzaParry"]

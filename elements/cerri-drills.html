@@ -185,6 +185,8 @@
             _processData: function(newValue) {
                 let data = {};
 
+                console.info("Started processing data");
+
                 data.nodes = newValue.nodes;
                 data.edges = [];
 
@@ -206,6 +208,8 @@
                     }
                 }
 
+                console.info("Finished processing data");
+
                 return data;
             },
 
@@ -217,7 +221,9 @@
 
                 newValue = this._processData(newValue);
 
-                var result = GraphLibrary.orderedCycles(newValue.nodes, newValue.edges);
+                console.info("Calculating ordered cycles");
+
+                let result = GraphLibrary.orderedCycles(newValue.nodes, newValue.edges);
 
                 result.forEach(function(r) {
                     r.header = this._generateHeader(r.length);
@@ -225,7 +231,9 @@
 
                 this.tables = result;
 
-                var minimalCycles = GraphLibrary.minialCoveringCycles(result, newValue.edges);
+                console.info("Calculating minimal cycles");
+
+                let minimalCycles = GraphLibrary.minialCoveringCycles(result, newValue.edges);
 
                 minimalCycles.paths.forEach(function(r) {
                     r.header = this._generateHeader(r.length);
