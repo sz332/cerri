@@ -7,18 +7,18 @@
 <link rel="import" href="../shared/shared-visjs.html">
 <link rel="import" href="../shared/shared-common.html">
 
-<link rel="import" href="../elements/leboucher-graph.html">
-<link rel="import" href="../elements/leboucher-drills.html">
+<link rel="import" href="../elements/cerri-graph.html">
+<link rel="import" href="../elements/cerri-drills.html">
 
 <script src="data.js"></script>
 
-<dom-module id="leboucher-index">
+<dom-module id="cerri-index">
     <template>
         <style>
 
         </style>
 
-        <iron-ajax auto url="{{_url('data/leboucher.json')}}" handle-as="json" last-response="{{data}}"></iron-ajax>
+        <iron-ajax auto url="{{_url('data/cerri.json')}}" handle-as="json" last-response="{{data}}"></iron-ajax>
 
         <paper-tabs selected="{{selected}}" attr-for-selected="name">
             <paper-tab name="graph">Graph</paper-tab>
@@ -26,15 +26,15 @@
         </paper-tabs>
 
         <iron-pages selected="{{selected}}" attr-for-selected="name">
-            <leboucher-graph data="[[data]]" name="graph"></leboucher-graph>
-            <leboucher-drills data="[[data]]" name="drills"></leboucher-drills>
+            <cerri-graph data="[[data]]" name="graph"></cerri-graph>
+            <cerri-drills data="[[data]]" name="drills"></cerri-drills>
         </iron-pages>
 
     </template>
 
     <script>
         Polymer({
-            is: 'leboucher-index',
+            is: 'cerri-index',
             behaviors: [CommonBehavior],
             properties: {
                 data: Object,
@@ -43,7 +43,7 @@
                     value: "graph"
                 }
             }
-        
+
         });
     </script>
 
