@@ -10,17 +10,25 @@ module.exports = class GraphParser {
 
     findCycles(maxCycleLength) {
         let result = [];
-        
+
         console.log("Started parsing graph");
 
         this.graph.nodes().forEach(node => this.cycleRecursive(node, this.graph, [], result, maxCycleLength));
-        
+
         console.log("Starting simplifying the result");
-        
-        let retValue = this.unique(result).map(function(list) { list.shift(); return list; }).sort(function(a, b) { return a.length - b.length; });
-        
+
+        let retValue = this.unique(result);
+
+        console.log("Changing order");
+
+        retValue = retValue.map(function(list) { list.shift(); return list; });
+
+        console.log("Sorting cycles by length");
+
+        retValue.sort(function(a, b) { return a.length - b.length; });
+
         console.log("Finished simplifying the result");
-        
+
         return retValue;
     }
 
@@ -35,8 +43,8 @@ module.exports = class GraphParser {
 
             // we found a current, self-returning circle
             if (path[0] === current) {
-                
-                if (result.length % 1000 === 0){
+
+                if (result.length % 1000 === 0) {
                     console.info("Found a cycle, path = " + path + " # of cycles = " + result.length);
                 }
 
@@ -67,12 +75,16 @@ module.exports = class GraphParser {
         });
     };
 
+    orderArray(array) {
+        return this.removeDuplicates(array.slice(0)).sort();
+    }
+
     arrayEquals(a, b) {
 
         if (a.length === b.length) {
 
-            let sortedA = this.removeDuplicates(a.slice(0)).sort();
-            let sortedB = this.removeDuplicates(b.slice(0)).sort();
+            let sortedA = a;
+            let sortedB = this.orderArray(b);
 
             for (let i = 0; i < sortedA.length; i++) {
                 if (sortedA[i] !== sortedB[i]) {
@@ -90,23 +102,27 @@ module.exports = class GraphParser {
 
         let result = [];
 
-        list.forEach(item =>{
+        for (let item of list) {
 
             let found = false;
 
-            result.forEach(r => {
-                if (this.arrayEquals(r, item)) {
+            for (let r of result) {
+                if (this.arrayEquals(r.sorted, item)) {
                     found = true;
+                    break;
                 }
-            });
-
-            if (!found) {
-                result.push(item);
             }
 
-        });
+            if (!found) {
+                result.push({
+                    original: item,
+                    sorted: this.orderArray(item)
+                });
+            }
 
-        return result;
+        };
+
+        return result.map(x => x.original);
     };
 
 }
