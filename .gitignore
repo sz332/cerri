@@ -49,3 +49,5 @@ Temporary Items
 bower_components
 .vscode/launch.json
 .vscode/launch.json
+
+node_modules
