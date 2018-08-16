@@ -5,8 +5,13 @@
 
 var Graph = require("graphlib").Graph;
 var GraphLoader = require("./graphloader.js");
+var GraphParser = require("./graphparser.js");
 
 let graph = new GraphLoader("data/cerri.json").load();
+
+let parser = new GraphParser(graph);
+
+let cycles = parser.findCycles();
 
 console.log("Now what");
 
