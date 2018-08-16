@@ -1,49 +1,65 @@
+// This is an application format of the drill generator. The reason the application
+// was developed is because the current solution was very slow, so slow, that it
+// broke the browser. Running as a separate application this shall be not a problem
+// hopefully
+
 var Graph = require("graphlib").Graph;
-var Alg = require("graphlib").alg;
 var Fs = require('fs');
 
-function convertJsonToGraph(json) {
-    let data = {};
+class GraphLoader{
 
-    console.info("Started processing data");
-
-    data.nodes = json.nodes;
-    data.edges = [];
-
-    for (let item of json.edges) {
-        for (let toNode of item.toList) {
-
-            if (typeof toNode === 'string' || toNode instanceof String) {
-                data.edges.push({
-                    "from": item.from,
-                    "to": toNode
-                });
-            } else {
-                data.edges.push({
-                    "from": item.from,
-                    "to": toNode.name
-                });
-            }
-
-        }
+    constructor(fileName){
+        this.fileName = fileName;
     }
 
-    console.info("Finished processing data");
-    return data;
+    load(){
+        return this.createGraph(this.fileName);
+    }
+
+    convertJsonToGraph(json) {
+        let data = {};
+    
+        data.nodes = json.nodes;
+        data.edges = [];
+    
+        for (let item of json.edges) {
+            for (let toNode of item.toList) {
+    
+                if (typeof toNode === 'string' || toNode instanceof String) {
+                    data.edges.push({
+                        "from": item.from,
+                        "to": toNode
+                    });
+                } else {
+                    data.edges.push({
+                        "from": item.from,
+                        "to": toNode.name
+                    });
+                }
+    
+            }
+        }
+    
+        return data;
+    }
+    
+    createGraph(fileName) {
+        let graphData = this.convertJsonToGraph(JSON.parse(Fs.readFileSync(fileName, 'utf8')));
+        let graph = new Graph();
+    
+        for (let node of graphData.nodes) {
+            graph.setNode(node.id, node.label);
+        }
+    
+        for (let edge of graphData.edges) {
+            graph.setEdge(edge.from, edge.to);
+        }
+    
+        return graph;
+    }
 }
 
-let graphData = convertJsonToGraph(JSON.parse(Fs.readFileSync('data/cerri.json', 'utf8')));
-let graph = new Graph();
-
-for (let node of graphData.nodes){
-    graph.setNode(node.id, node.label);
-}
-
-for (let edge of graphData.edges){
-    graph.setEdge(edge.from, edge.to);
-}
-
-let cycles = Alg.findCycles(graph);
+let graph = new GraphLoader("data/cerri.json").load();
 
 console.log("Now what");
 
