@@ -11,3 +11,4 @@ let graph = new GraphLoader("data/cerri.json").load();
 console.log("Now what");
 
 //https://github.com/dagrejs/graphlib/wiki/API-Reference#alg-find-cycles
+// https://basarat.gitbooks.io/typescript/docs/quick/nodejs.html
