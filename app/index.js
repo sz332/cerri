@@ -11,7 +11,7 @@ let graph = new GraphLoader("data/cerri.json").load();
 
 let parser = new GraphParser(graph);
 
-let cycles = parser.findCycles();
+let cycles = parser.findCycles(6);
 
 console.log("Now what");
 

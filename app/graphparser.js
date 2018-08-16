@@ -8,16 +8,26 @@ module.exports = class GraphParser {
         this.graph = graph;
     }
 
-    findCycles() {
+    findCycles(maxCycleLength) {
         let result = [];
-        this.graph.nodes().forEach(node => this.cycleRecursive(node, this.graph, [], result));
-        return result;
+        
+        console.log("Started parsing graph");
+
+        this.graph.nodes().forEach(node => this.cycleRecursive(node, this.graph, [], result, maxCycleLength));
+        
+        console.log("Starting simplifying the result");
+        
+        let retValue = this.unique(result).map(function(list) { list.shift(); return list; }).sort(function(a, b) { return a.length - b.length; });
+        
+        console.log("Finished simplifying the result");
+        
+        return retValue;
     }
 
-    cycleRecursive(current, graph, path, result) {
+    cycleRecursive(current, graph, path, result, maxCycleLength) {
 
-        // if the path is too long, we will skip it, we don't need cycles consisting of more than 6 exercises
-        if (path.length > 6) {
+        // we will skip the too long cycles
+        if (path.length > maxCycleLength) {
             return;
         }
 
@@ -25,7 +35,11 @@ module.exports = class GraphParser {
 
             // we found a current, self-returning circle
             if (path[0] === current) {
-                console.info("Found a cycle, path = " + path + " # of cycles = " + result.length);
+                
+                if (result.length % 1000 === 0){
+                    console.info("Found a cycle, path = " + path + " # of cycles = " + result.length);
+                }
+
                 path.push(current);
                 result.push(path);
                 return;
@@ -42,9 +56,57 @@ module.exports = class GraphParser {
         outEdges.forEach(edge => {
             let clonedArray = path.slice(0);
             clonedArray.push(current);
-            this.cycleRecursive(edge.w, this.graph, clonedArray, result);
+            this.cycleRecursive(edge.w, this.graph, clonedArray, result, maxCycleLength);
         });
 
+    };
+
+    removeDuplicates(input) {
+        return input.filter(function(item, pos, self) {
+            return self.indexOf(item) == pos;
+        });
+    };
+
+    arrayEquals(a, b) {
+
+        if (a.length === b.length) {
+
+            let sortedA = this.removeDuplicates(a.slice(0)).sort();
+            let sortedB = this.removeDuplicates(b.slice(0)).sort();
+
+            for (let i = 0; i < sortedA.length; i++) {
+                if (sortedA[i] !== sortedB[i]) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    };
+
+    unique(list) {
+
+        let result = [];
+
+        list.forEach(item =>{
+
+            let found = false;
+
+            result.forEach(r => {
+                if (this.arrayEquals(r, item)) {
+                    found = true;
+                }
+            });
+
+            if (!found) {
+                result.push(item);
+            }
+
+        });
+
+        return result;
     };
 
 }
