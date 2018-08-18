@@ -29,7 +29,13 @@ module.exports = class GraphMinimizer {
         this.graph = graph;
     }
 
-    minimalCoveringCycles(originalCycles) {
+    minimalCoveringCycles(originalCycles, filter) {
+
+        if (filter === undefined) {
+            filter = function(path) {
+                return true;
+            }
+        }
 
         console.info("Calculating minimal coverage cycles...");
 
@@ -58,6 +64,10 @@ module.exports = class GraphMinimizer {
         }
 
         for (let originalPath of cycles) {
+
+            if (!filter(originalPath)) {
+                continue;
+            }
 
             // make a clone from the old path
             let path = originalPath.slice(0);

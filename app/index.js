@@ -14,18 +14,16 @@ let cycleFinder = new GraphCycleFinder(graph);
 let cycles = cycleFinder.findCycles(6);
 
 let minimizer = new GraphMinimizer(graph);
-let minimalCycles = minimizer.minimalCoveringCycles(cycles);
+let minimalCycles = minimizer.minimalCoveringCycles(cycles, path => path.length > 2);
 
 for (let pathObject of minimalCycles.paths ){
-    if (pathObject.length > 2){
-
         console.log("\n Exercises of " + pathObject.length + " moves: \n");
 
-        for (let path of pathObject.data){
-            console.info(path.join(", "));
-        }
+        let counter = 1;
 
-    }
+        for (let path of pathObject.data){
+            console.info(counter++ + ". " + path.join(", "));
+        }
 }
 
 console.info("End.");

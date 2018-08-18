@@ -2,6 +2,10 @@
 
 let Graph = require("graphlib").Graph;
 
+const {
+    performance
+} = require('perf_hooks');
+
 module.exports = class GraphCycleFinder {
 
     constructor(graph) {
@@ -102,7 +106,20 @@ module.exports = class GraphCycleFinder {
 
         let result = [];
 
+        let counter = 0;
+
+        let start = performance.now();
+
         for (let item of list) {
+
+            if (counter++ % 5000 === 0) {
+
+                let duration = performance.now() - start;
+
+                console.info("Working on item " + counter + " of " + list.length + " [" + duration + "] msec");
+
+                start = performance.now();
+            }
 
             let found = false;
 
