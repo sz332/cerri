@@ -83,54 +83,31 @@ module.exports = class GraphMinimizer {
 
         let goodPaths = [];
 
-        while (graph.edgeCount() > 0) {
+        let paths = cycles.map(path => ({ original: path, edges: path.map((x, i, array) => ({ v: x, w: array[(i + 1) % array.length] })) }));
+
+        while (graph.edgeCount() > 0 || max == 0) {
 
             let found = false;
 
-            for (let originalPath of cycles) {
+            for (let path of paths) {
 
-                if (!filter(originalPath)) {
+                if (!filter(path.original)) {
                     continue;
                 }
 
-                // make a clone from the old path and  add the first element to the end of the list so that the path will be a cycle
-                let path = originalPath.slice(0);
-                path.push(path[0]);
-
-                let edgeCount = 0;
-
-                // calculate the number of edges in the graph
-                for (let i = 0; i < path.length - 1; i++) {
-
-                    let source = path[i];
-                    let target = path[i + 1];
-
-                    if (graph.hasEdge(source, target)) {
-                        edgeCount++;
-                    }
-                }
+                let edgeCount = path.edges.filter(edge => graph.hasEdge(edge)).length;
 
                 if (edgeCount === max) {
-
                     found = true;
-
-                    for (let i = 0; i < path.length - 1; i++) {
-                        let source = path[i];
-                        let target = path[i + 1];
-                        if (graph.hasEdge(source, target)) {
-                            graph.removeEdge(source, target);
-                        }
-                    }
-
-                    goodPaths.push(originalPath);
+                    path.edges.filter(edge => graph.hasEdge(edge)).forEach(edge => graph.removeEdge(edge));
+                    goodPaths.push(path.original);
                 }
             }
 
-            if (!found){
+            if (!found) {
                 max--;
             }
         }
-
 
         return goodPaths;
     }
