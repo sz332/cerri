@@ -8,7 +8,7 @@ var GraphLoader = require("./graphLoader.js");
 var GraphCycleFinder = require("./graphCycleFinder.js");
 var GraphMinimizer = require("./graphMinimizer.js");
 
-let graph = new GraphLoader("data/cerri.json").load();
+let graph = new GraphLoader("../data/cerri.json").load();
 
 let cycleFinder = new GraphCycleFinder(graph);
 let cycles = cycleFinder.findCycles(6);
