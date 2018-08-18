@@ -57,11 +57,27 @@ module.exports = class GraphMinimizer {
 
         // the good paths store
 
-        let goodPaths = [];
-
         let info = {
             originalSize: cycles.length
         }
+
+        let goodPaths = this.naiveAlgorithm(graph, cycles, filter);
+
+        console.log("Found minimal number of covering cycles, cycle count = " + goodPaths.length);
+
+        // minimalize the number of paths
+
+        info.minimizedSize = goodPaths.length;
+
+        // return the paths, and the remaining edges, if any
+        return {
+            paths: this.groupPathsBySize(goodPaths),
+            info: info
+        };
+    }
+
+    naiveAlgorithm(graph, cycles, filter){
+        let goodPaths = [];
 
         for (let originalPath of cycles) {
 
@@ -100,17 +116,7 @@ module.exports = class GraphMinimizer {
             }
         }
 
-        console.log("Found minimal number of covering cycles, cycle count = " + goodPaths.length);
-
-        // minimalize the number of paths
-
-        info.minimizedSize = goodPaths.length;
-
-        // return the paths, and the remaining edges, if any
-        return {
-            paths: this.groupPathsBySize(goodPaths),
-            info: info
-        };
+        return goodPaths;
     }
 
     /**
