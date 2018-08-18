@@ -39,4 +39,9 @@ node index.js
 
 This will display the exercises..
 
+## 5. Performance and result
+
+  * The naive algorithm calculated cca. 100 drills. 
+  * The advanced algorithm calculated around 39 drills for maximum 6 moves / drill, and required around 6 seconds.
+  * By increasing the maximum moves to 8, the algorithm found 28 drills covering the whole graph, and required around 8 minutes. 
 
