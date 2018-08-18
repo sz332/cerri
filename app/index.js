@@ -10,11 +10,8 @@ var GraphMinimizer = require("./graphMinimizer.js");
 
 let graph = new GraphLoader("../data/cerri.json").load();
 
-let cycleFinder = new GraphCycleFinder(graph);
-let cycles = cycleFinder.findCycles(6);
-
-let minimizer = new GraphMinimizer(graph);
-let minimalCycles = minimizer.minimalCoveringCycles(cycles);
+let cycles = new GraphCycleFinder(graph).findCycles(6);
+let minimalCycles = new GraphMinimizer(graph).minimalCoveringCycles(cycles);
 
 for (let pathObject of minimalCycles.paths ){
         console.log("\n Exercises of " + pathObject.length + " moves: \n");

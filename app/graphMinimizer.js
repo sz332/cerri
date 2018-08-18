@@ -61,7 +61,7 @@ module.exports = class GraphMinimizer {
             originalSize: cycles.length
         }
 
-        let goodPaths = this.selectMaxEdgeAlgorithm(graph, cycles, filter);
+        let goodPaths = this._selectMaxEdgeAlgorithm(graph, cycles, filter);
 
         console.log("Found minimal number of covering cycles, cycle count = " + goodPaths.length);
 
@@ -71,19 +71,29 @@ module.exports = class GraphMinimizer {
 
         // return the paths, and the remaining edges, if any
         return {
-            paths: this.groupPathsBySize(goodPaths),
+            paths: this._groupPathsBySize(goodPaths),
             info: info
         };
     }
 
 
-    selectMaxEdgeAlgorithm(graph, cycles, filter) {
+    /**
+     * Start from maximum length of cycles. While there is any edge in the graph, check if 
+     * there is a cycle which can remove the max amount of edges. If there is, then add it to the list.
+     * If there is no cycle, then decrease the max number, and re-check the cycles until no edge remains
+     * in the graph.
+     * 
+     * @param {*} graph The graph
+     * @param {*} cycles The cycles we want to check
+     * @param {*} filter Filter to be applied to each circle. Returns true, if the circle needs to be processed.
+     */
+    _selectMaxEdgeAlgorithm(graph, cycles, filter) {
 
         let max = cycles.map(x => x.length).reduce((acc, x) => Math.max(acc, x));
 
         let goodPaths = [];
 
-        let paths = cycles.map(path => ({ original: path, edges: path.map((x, i, array) => ({ v: x, w: array[(i + 1) % array.length] })) }));
+        let paths = cycles.map(path => ({ original: path, edges: path.map((node, i, array) => ({ v: node, w: array[(i + 1) % array.length] })) }));
 
         while (graph.edgeCount() > 0 || max == 0) {
 
@@ -112,39 +122,31 @@ module.exports = class GraphMinimizer {
         return goodPaths;
     }
 
-    naiveAlgorithm(graph, cycles, filter) {
+    _naiveAlgorithm(graph, cycles, filter) {
         let goodPaths = [];
 
-        for (let originalPath of cycles) {
+        let paths = cycles.map(path => ({ original: path, edges: path.map((node, i, array) => ({ v: node, w: array[(i + 1) % array.length] })) }));
 
-            if (!filter(originalPath)) {
+        for (let path of paths) {
+
+            if (!filter(path.original)) {
                 continue;
             }
-
-            // make a clone from the old path
-            let path = originalPath.slice(0);
-
-            // add the first element to the end of the list so that the path will be a cycle
-            path.push(path[0]);
 
             // found at least an edge to be removed
             let removedEdge = false;
 
             // for every edge in the path
-            for (let i = 0; i < path.length - 1; i++) {
-
-                let source = path[i];
-                let target = path[i + 1];
-
-                if (graph.hasEdge(source, target)) {
+            for (let edge of path.edges) {
+                if (graph.hasEdge(edge)) {
                     removedEdge = true;
-                    graph.removeEdge(source, target);
+                    graph.removeEdge(edge);
                 }
             }
 
             // if the path removed at least a single edge, add it to the list
             if (removedEdge) {
-                goodPaths.push(originalPath);
+                goodPaths.push(path.original);
             }
 
             if (graph.edgeCount() == 0) {
@@ -159,7 +161,7 @@ module.exports = class GraphMinimizer {
      * Groups paths by length
      * @param {*} pathList 
      */
-    groupPathsBySize(pathList) {
+    _groupPathsBySize(pathList) {
 
         let lastSize = 0;
         let sameSizeList = [];
