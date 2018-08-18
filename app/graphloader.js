@@ -42,7 +42,7 @@ module.exports = class GraphLoader{
     
     createGraph(fileName) {
         let graphData = this.convertJsonToGraph(JSON.parse(Fs.readFileSync(fileName, 'utf8')));
-        let graph = new Graph();
+        let graph = new Graph({ directed: true });
     
         for (let node of graphData.nodes) {
             graph.setNode(node.id, node.label);
