@@ -26,16 +26,28 @@ let Graph = require("graphlib").Graph;
 module.exports = class GraphMinimizer {
 
     constructor(graph) {
-        this.graph = new Graph({ directed: true });
-        this.graph.setNodes(graph.getNodes());
-
-        for (let edge of graph.edges()) {
-            this.graph.setEdge(edge.from, edge.to);
-        }
+        this.graph = graph;
     }
 
-    minimalCoveringCycles(cycles) {
-        let _cycles = cycles.slice(0);
+    minimalCoveringCycles(originalCycles) {
+
+        // clone the original graph
+
+        let graph = new Graph({ directed: true });
+
+        for (let node of this.graph.nodes()) {
+            graph.setNode(node);
+        }
+
+        for (let edge of this.graph.edges()) {
+            graph.setEdge(edge);
+        }
+
+        // clone the original cycles
+
+        let cycles = originalCycles.slice(0);
+
+        // the good paths store
 
         let goodPaths = [];
 
@@ -43,12 +55,12 @@ module.exports = class GraphMinimizer {
             originalSize: 0
         }
 
-        info.originalSize = _cycles.map(x => x.length).reduce((acc, currentValue) => acc + currentValue);
+        info.originalSize = cycles.map(x => x.length).reduce((acc, currentValue) => acc + currentValue);
 
-        for (let path of _cycles) {
+        for (let originalPath of cycles) {
 
             // make a clone from the old path
-            let oldPath = path.slice(0);
+            let path = originalPath.slice(0);
 
             // add the first element to the end of the list so that the path will be a cycle
             path.push(path[0]);
@@ -62,18 +74,18 @@ module.exports = class GraphMinimizer {
                 let source = path[i];
                 let target = path[i + 1];
 
-                if (this.graph.hasEdge(source, target)) {
+                if (graph.hasEdge(source, target)) {
                     this.removedEdge = true;
-                    this.graph.removeEdge(source, target);
+                    graph.removeEdge(source, target);
                 }
             }
 
             // if the path removed at least a single edge, add it to the list
             if (removedEdge) {
-                goodPaths.push(oldPath);
+                goodPaths.push(originalPath);
             }
 
-            if (this.graph.edgeCount() == 0) {
+            if (graph.edgeCount() == 0) {
                 break;
             }
         }

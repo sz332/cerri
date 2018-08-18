@@ -6,12 +6,29 @@
 var Graph = require("graphlib").Graph;
 var GraphLoader = require("./graphloader.js");
 var GraphCycleFinder = require("./graphCycleFinder.js");
+var GraphMinimizer = require("./graphMinimizer.js");
 
-let graph = new GraphLoader("../data/cerri.json").load();
+//let graph = new GraphLoader("../data/cerri.json").load();
 
-let cycleFinder = new GraphCycleFinder(graph);
+//let cycleFinder = new GraphCycleFinder(graph);
 
-let cycles = cycleFinder.findCycles(6);
+//let cycles = cycleFinder.findCycles(6);
+
+
+let myGraph = new Graph({directed: true});
+
+myGraph.setNode("a");
+myGraph.setNode("b");
+myGraph.setNode("c");
+myGraph.setNode("d");
+
+myGraph.setEdge("a","b");
+myGraph.setEdge("b","c");
+myGraph.setEdge("c","d");
+myGraph.setEdge("d","a");
+
+let minimizer = new GraphMinimizer(myGraph);
+minimizer.minimalCoveringCycles([["a","b","c","d"]]);
 
 console.log("Now what");
 
