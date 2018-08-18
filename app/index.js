@@ -8,7 +8,7 @@ var GraphLoader = require("./graphloader.js");
 var GraphCycleFinder = require("./graphCycleFinder.js");
 var GraphMinimizer = require("./graphMinimizer.js");
 
-let graph = new GraphLoader("../data/cerri.json").load();
+let graph = new GraphLoader("data/cerri.json").load();
 
 let cycleFinder = new GraphCycleFinder(graph);
 let cycles = cycleFinder.findCycles(6);
@@ -16,20 +16,16 @@ let cycles = cycleFinder.findCycles(6);
 let minimizer = new GraphMinimizer(graph);
 let minimalCycles = minimizer.minimalCoveringCycles(cycles);
 
-console.log("Now what...");
+for (let pathObject of minimalCycles.paths ){
+    if (pathObject.length > 2){
 
+        console.log("\n Exercises of " + pathObject.length + " moves: \n");
 
-// let myGraph = new Graph({directed: true});
+        for (let path of pathObject.data){
+            console.info(path.join(", "));
+        }
 
-// myGraph.setNode("a");
-// myGraph.setNode("b");
-// myGraph.setNode("c");
-// myGraph.setNode("d");
+    }
+}
 
-// myGraph.setEdge("a","b");
-// myGraph.setEdge("b","c");
-// myGraph.setEdge("c","d");
-// myGraph.setEdge("d","a");
-
-//https://github.com/dagrejs/graphlib/wiki/API-Reference#alg-find-cycles
-// https://basarat.gitbooks.io/typescript/docs/quick/nodejs.html
+console.info("End.");

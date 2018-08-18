@@ -98,12 +98,16 @@ module.exports = class GraphMinimizer {
 
         // return the paths, and the remaining edges, if any
         return {
-            paths: this.groupPaths(goodPaths),
+            paths: this.groupPathsBySize(goodPaths),
             info: info
         };
     }
 
-    groupPaths(pathList) {
+    /**
+     * Groups paths by length
+     * @param {*} pathList 
+     */
+    groupPathsBySize(pathList) {
 
         let lastSize = 0;
         let sameSizeList = [];
