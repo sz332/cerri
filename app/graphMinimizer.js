@@ -61,7 +61,7 @@ module.exports = class GraphMinimizer {
             originalSize: cycles.length
         }
 
-        let goodPaths = this.naiveAlgorithm(graph, cycles, filter);
+        let goodPaths = this.selectMaxEdgeAlgorithm(graph, cycles, filter);
 
         console.log("Found minimal number of covering cycles, cycle count = " + goodPaths.length);
 
@@ -76,7 +76,66 @@ module.exports = class GraphMinimizer {
         };
     }
 
-    naiveAlgorithm(graph, cycles, filter){
+
+    selectMaxEdgeAlgorithm(graph, cycles, filter) {
+
+        let max = cycles.map(x => x.length).reduce((acc, x) => Math.max(acc, x));
+
+        let goodPaths = [];
+
+        while (graph.edgeCount() > 0) {
+
+            let found = false;
+
+            for (let originalPath of cycles) {
+
+                if (!filter(originalPath)) {
+                    continue;
+                }
+
+                // make a clone from the old path and  add the first element to the end of the list so that the path will be a cycle
+                let path = originalPath.slice(0);
+                path.push(path[0]);
+
+                let edgeCount = 0;
+
+                // calculate the number of edges in the graph
+                for (let i = 0; i < path.length - 1; i++) {
+
+                    let source = path[i];
+                    let target = path[i + 1];
+
+                    if (graph.hasEdge(source, target)) {
+                        edgeCount++;
+                    }
+                }
+
+                if (edgeCount === max) {
+
+                    found = true;
+
+                    for (let i = 0; i < path.length - 1; i++) {
+                        let source = path[i];
+                        let target = path[i + 1];
+                        if (graph.hasEdge(source, target)) {
+                            graph.removeEdge(source, target);
+                        }
+                    }
+
+                    goodPaths.push(originalPath);
+                }
+            }
+
+            if (!found){
+                max--;
+            }
+        }
+
+
+        return goodPaths;
+    }
+
+    naiveAlgorithm(graph, cycles, filter) {
         let goodPaths = [];
 
         for (let originalPath of cycles) {
