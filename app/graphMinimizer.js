@@ -31,6 +31,8 @@ module.exports = class GraphMinimizer {
 
     minimalCoveringCycles(originalCycles) {
 
+        console.info("Calculating minimal coverage cycles...");
+
         // clone the original graph
 
         let graph = new Graph({ directed: true });
@@ -87,6 +89,8 @@ module.exports = class GraphMinimizer {
                 break;
             }
         }
+
+        console.log("Found minimal number of covering cycles, cycle count = " + goodPaths.length);
 
         // minimalize the number of paths
 
