@@ -28,7 +28,7 @@ myGraph.setEdge("c","d");
 myGraph.setEdge("d","a");
 
 let minimizer = new GraphMinimizer(myGraph);
-minimizer.minimalCoveringCycles([["a","b","c","d"]]);
+let minimalCycles = minimizer.minimalCoveringCycles([["a","b","c","d"]]);
 
 console.log("Now what");
 

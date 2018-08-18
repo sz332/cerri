@@ -52,10 +52,8 @@ module.exports = class GraphMinimizer {
         let goodPaths = [];
 
         let info = {
-            originalSize: 0
+            originalSize: cycles.length
         }
-
-        info.originalSize = cycles.map(x => x.length).reduce((acc, currentValue) => acc + currentValue);
 
         for (let originalPath of cycles) {
 
@@ -75,7 +73,7 @@ module.exports = class GraphMinimizer {
                 let target = path[i + 1];
 
                 if (graph.hasEdge(source, target)) {
-                    this.removedEdge = true;
+                    removedEdge = true;
                     graph.removeEdge(source, target);
                 }
             }
