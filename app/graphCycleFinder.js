@@ -2,7 +2,7 @@
 
 let Graph = require("graphlib").Graph;
 
-module.exports = class GraphParser {
+module.exports = class GraphCycleFinder {
 
     constructor(graph) {
         this.graph = graph;
