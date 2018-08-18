@@ -4,7 +4,7 @@
 // hopefully
 
 var Graph = require("graphlib").Graph;
-var GraphLoader = require("./graphloader.js");
+var GraphLoader = require("./graphLoader.js");
 var GraphCycleFinder = require("./graphCycleFinder.js");
 var GraphMinimizer = require("./graphMinimizer.js");
 
