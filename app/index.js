@@ -46,6 +46,8 @@ for (let pathObject of minimalCycles.paths) {
     }
 }
 
+// Display statistics about the graph
+
 let cycleGoodness = new GraphStatistics(graph).getCycleGoodness(minimalCycles.paths);
 
 console.log("Edge count in graph = " + cycleGoodness.graphEdgeCount);
