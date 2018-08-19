@@ -6,6 +6,7 @@
 var GraphLoader = require("./graphLoader.js");
 var GraphCycleFinder = require("./graphCycleFinder.js");
 var GraphMinimizer = require("./graphMinimizer.js");
+var GraphStatistics = require("./graphStatistics.js");
 
 const {
     performance
@@ -33,6 +34,8 @@ let minimalCycles = new GraphMinimizer(graph).minimalCoveringCycles(cycles);
 
 // Display end result
 
+let duration = performance.now() - start;
+
 for (let pathObject of minimalCycles.paths) {
     console.log("\n Exercises of " + pathObject.length + " moves: \n");
 
@@ -43,7 +46,12 @@ for (let pathObject of minimalCycles.paths) {
     }
 }
 
-// Display time spent for calculating the result
+let cycleGoodness = new GraphStatistics(graph).getCycleGoodness(minimalCycles.paths);
 
-let duration = performance.now() - start;
+console.log("Edge count in graph = " + cycleGoodness.graphEdgeCount);
+console.log("Edge count in cycles = " + cycleGoodness.cyclesEdgeCount);
+console.log("Goodness ratio = " + parseFloat(cycleGoodness.ratio).toFixed(3));
+console.log("Cycles have " + (parseFloat((cycleGoodness.ratio - 1) * 100).toFixed(0)) + " % more edges than the original graph");
+
+// Display time spent for calculating the result
 console.info("Ended in " + (duration / 1000) + " sec");
