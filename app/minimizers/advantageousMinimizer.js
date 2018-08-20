@@ -13,29 +13,25 @@ module.exports = class AdvantageousMinimizer {
      * @param {Array} filter Filter to be applied to each circle. Returns true, if the circle needs to be processed.
      */
     minimize(graph, cycles, filter) {
-        function decreaseEdgeCount(e2c, p) {
-            for (let e of p.edges) {
-                let k = e.v + ":" + e.w;
-                delete e2c[k];
-            }
-        }
+
         let max = cycles.map(x => x.length).reduce((acc, x) => Math.max(acc, x));
 
         let goodPaths = [];
 
         let paths = cycles.map(path => ({ original: path, edges: path.map((node, i, array) => ({ v: node, w: array[(i + 1) % array.length] })) }));
 
-        let edge2count = {};
+        let edgeCountMap = {};
 
         // egy él hány körben fordul elő
 
         for (let cycle of cycles) {
             for (let i = 0; i < cycle.length; i++) {
                 let k = cycle[i] + ":" + (i == cycle.length - 1 ? cycle[0] : cycle[i + 1]);
-                if (k in edge2count)
-                    edge2count[k]++
-                    else
-                        edge2count[k] = 1;
+                if (k in edgeCountMap) {
+                    edgeCountMap[k]++;
+                } else {
+                    edgeCountMap[k] = 1;
+                }
             }
         }
 
@@ -46,13 +42,14 @@ module.exports = class AdvantageousMinimizer {
 
             let ecc = [];
             let ech = {};
-            for (let k in edge2count) {
-                if (ecc[edge2count[k]] == undefined) {
-                    ecc[edge2count[k]] = 1;
-                    ech[edge2count[k]] = 1;
+
+            for (let k in edgeCountMap) {
+                if (ecc[edgeCountMap[k]] == undefined) {
+                    ecc[edgeCountMap[k]] = 1;
+                    ech[edgeCountMap[k]] = 1;
                 } else {
-                    ecc[edge2count[k]]++;
-                    ech[edge2count[k]]++;
+                    ecc[edgeCountMap[k]]++;
+                    ech[edgeCountMap[k]]++;
                 }
             }
 
@@ -72,12 +69,12 @@ module.exports = class AdvantageousMinimizer {
             console.log("Statistics:" + minOcc + ": rest:" + JSON.stringify(ech));
 
             let found = false;
-            for (let mink in edge2count) {
+            for (let mink in edgeCountMap) {
 
                 // ha van olyan kör ami egyetlen élben fordul elő, akkor
                 // azt leveszi
 
-                if (edge2count[mink] == 1) {
+                if (edgeCountMap[mink] == 1) {
                     found = true;
                     for (let path of paths) {
                         for (let i = 0; i < path.edges.length; i++) {
@@ -85,9 +82,7 @@ module.exports = class AdvantageousMinimizer {
                             if (mink == k) {
                                 console.log("Forced selection:" + mink + ":" + JSON.stringify(path.original));
                                 found = true;
-                                path.edges.filter(edge => graph.hasEdge(edge)).forEach(edge => graph.removeEdge(edge));
-                                goodPaths.push(path.original);
-                                decreaseEdgeCount(edge2count, path);
+                                this.removeEdges(graph, path, goodPaths, edgeCountMap);
                             }
                         }
                     }
@@ -101,11 +96,13 @@ module.exports = class AdvantageousMinimizer {
             // olyan éleket keressük amelyek a legkevesebb körben fordulnak elő, viszont
             // a körből a lehető legtöbb élet ki tudja venni, ez az előnyös választás
 
-            for (let minK in edge2count) {
+            for (let minK in edgeCountMap) {
+
                 if (found) {
                     break;
                 }
-                if (edge2count[minK] == minOcc) {
+
+                if (edgeCountMap[minK] == minOcc) {
                     // this is an edge that is occurring only a few times
                     for (let path of paths) {
 
@@ -117,9 +114,8 @@ module.exports = class AdvantageousMinimizer {
 
                         for (let e of path.edges) {
                             if (minK == e.v + ":" + e.w) {
-                                let edgeCount = path.edges.filter(edge => graph.hasEdge(edge)).length;
 
-                                if (edgeCount === max) {
+                                if (max === this.pathEdgeCount(graph, path)) {
                                     advantageous = true;
                                     break;
                                 }
@@ -129,9 +125,7 @@ module.exports = class AdvantageousMinimizer {
                         if (advantageous) {
                             console.log("Advantageous selection:" + minK + " " + JSON.stringify(path.original));
                             found = true;
-                            path.edges.filter(edge => graph.hasEdge(edge)).forEach(edge => graph.removeEdge(edge));
-                            goodPaths.push(path.original);
-                            decreaseEdgeCount(edge2count, path);
+                            this.removeEdges(graph, path, goodPaths, edgeCountMap);
                         }
                     }
 
@@ -148,13 +142,9 @@ module.exports = class AdvantageousMinimizer {
                     continue;
                 }
 
-                let edgeCount = path.edges.filter(edge => graph.hasEdge(edge)).length;
-
-                if (edgeCount === max) {
+                if (max === this.pathEdgeCount(graph, path)) {
                     found = true;
-                    path.edges.filter(edge => graph.hasEdge(edge)).forEach(edge => graph.removeEdge(edge));
-                    goodPaths.push(path.original);
-                    decreaseEdgeCount(edge2count, path);
+                    this.removeEdges(graph, path, goodPaths, edgeCountMap);
                 }
             }
 
@@ -164,6 +154,35 @@ module.exports = class AdvantageousMinimizer {
         }
 
         return goodPaths;
+    }
+
+    pathEdgeCount(graph, path) {
+        return path.edges.filter(edge => graph.hasEdge(edge)).length;
+    }
+
+    /**
+     * 
+     * @param {Graph} graph 
+     * @param {Array} path 
+     * @param {Array} goodPaths 
+     * @param {Object} edgeMap 
+     */
+    removeEdges(graph, path, goodPaths, edgeMap) {
+        path.edges.filter(edge => graph.hasEdge(edge)).forEach(edge => graph.removeEdge(edge));
+        goodPaths.push(path.original);
+        this.decreaseEdgeCount(edgeMap, path);
+    }
+
+    /**
+     * 
+     * @param {Object} edgeMap 
+     * @param {Object} p 
+     */
+    decreaseEdgeCount(edgeMap, p) {
+        for (let edge of p.edges) {
+            let k = edge.v + ":" + edge.w;
+            delete edgeMap[k];
+        }
     }
 
 
