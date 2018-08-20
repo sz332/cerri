@@ -111,7 +111,12 @@ module.exports = class GraphMinimizer {
                     found = true;
                     path.edges.filter(edge => graph.hasEdge(edge)).forEach(edge => graph.removeEdge(edge));
                     goodPaths.push(path.original);
+
+                    if (graph.edgeCount() == 0) {
+                        break;
+                    }
                 }
+
             }
 
             if (!found) {
