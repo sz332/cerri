@@ -22,11 +22,11 @@ module.exports = class AdvantageousMinimizer {
 
         let edgeCountMap = {};
 
-        // egy él hány körben fordul elő
-
+        // calculate the number of every edge used in a cycle
         for (let cycle of cycles) {
             for (let i = 0; i < cycle.length; i++) {
                 let k = cycle[i] + ":" + (i == cycle.length - 1 ? cycle[0] : cycle[i + 1]);
+
                 if (k in edgeCountMap) {
                     edgeCountMap[k]++;
                 } else {
@@ -69,10 +69,10 @@ module.exports = class AdvantageousMinimizer {
             console.log("Statistics:" + minOcc + ": rest:" + JSON.stringify(ech));
 
             let found = false;
+
             for (let mink in edgeCountMap) {
 
-                // ha van olyan kör ami egyetlen élben fordul elő, akkor
-                // azt leveszi
+                // if there is an edge which is only in a single cycle then add this to the list
 
                 if (edgeCountMap[mink] == 1) {
                     found = true;
