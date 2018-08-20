@@ -23,6 +23,7 @@ module.exports = class AdvantageousMinimizer {
         let edgeCountMap = {};
 
         // calculate the number of every edge used in a cycle
+        
         for (let cycle of cycles) {
             for (let i = 0; i < cycle.length; i++) {
                 let k = cycle[i] + ":" + (i == cycle.length - 1 ? cycle[0] : cycle[i + 1]);
@@ -44,43 +45,40 @@ module.exports = class AdvantageousMinimizer {
             let ech = {};
 
             for (let k in edgeCountMap) {
-                if (ecc[edgeCountMap[k]] == undefined) {
-                    ecc[edgeCountMap[k]] = 1;
-                    ech[edgeCountMap[k]] = 1;
+
+                const val = edgeCountMap[k];
+
+                if (ecc[val] == undefined) {
+                    ecc[val] = 1;
+                    ech[val] = 1;
                 } else {
-                    ecc[edgeCountMap[k]]++;
-                    ech[edgeCountMap[k]]++;
+                    ecc[val]++;
+                    ech[val]++;
                 }
             }
 
-            // 
+            // Calculate minimum occurance
 
-            let minOcc = 0;
-            for (let i = 1; i < ecc.length; i++) {
-                if (ecc[i] !== undefined) {
-                    minOcc = i;
-                    break;
-                }
-            }
+            let minOccurance = ecc.findIndex(x => x !== undefined) || 0;
 
             // check out if any of the minOcc would decrease by current max
             // because then it is worth to use that one and not randomly another
 
-            console.log("Statistics:" + minOcc + ": rest:" + JSON.stringify(ech));
+            console.log("Statistics:" + minOccurance + ": rest:" + JSON.stringify(ech));
 
             let found = false;
 
-            for (let mink in edgeCountMap) {
+            for (let min_k in edgeCountMap) {
 
                 // if there is an edge which is only in a single cycle then add this to the list
 
-                if (edgeCountMap[mink] == 1) {
+                if (edgeCountMap[min_k] == 1) {
                     found = true;
                     for (let path of paths) {
                         for (let i = 0; i < path.edges.length; i++) {
                             let k = path.edges[i].v + ":" + path.edges[i].w;
-                            if (mink == k) {
-                                console.log("Forced selection:" + mink + ":" + JSON.stringify(path.original));
+                            if (min_k == k) {
+                                console.log("Forced selection:" + min_k + ":" + JSON.stringify(path.original));
                                 found = true;
                                 this._removeEdges(graph, path, goodPaths, edgeCountMap);
                             }
@@ -102,7 +100,7 @@ module.exports = class AdvantageousMinimizer {
                     break;
                 }
 
-                if (edgeCountMap[minK] == minOcc) {
+                if (edgeCountMap[minK] == minOccurance) {
                     // this is an edge that is occurring only a few times
                     for (let path of paths) {
 
