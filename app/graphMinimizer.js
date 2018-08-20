@@ -25,8 +25,23 @@ let Graph = require("graphlib").Graph;
  */
 module.exports = class GraphMinimizer {
 
-    constructor(graph) {
+    constructor(graph, algorithm) {
         this.graph = graph;
+        this.algorithm = algorithm;
+    }
+
+    _cloneGraph(graph) {
+        let clone = new Graph({ directed: true });
+
+        for (let node of graph.nodes()) {
+            clone.setNode(node);
+        }
+
+        for (let edge of graph.edges()) {
+            clone.setEdge(edge);
+        }
+
+        return clone;
     }
 
     minimalCoveringCycles(originalCycles, filter) {
@@ -41,15 +56,7 @@ module.exports = class GraphMinimizer {
 
         // clone the original graph
 
-        let graph = new Graph({ directed: true });
-
-        for (let node of this.graph.nodes()) {
-            graph.setNode(node);
-        }
-
-        for (let edge of this.graph.edges()) {
-            graph.setEdge(edge);
-        }
+        let graph = this._cloneGraph(this.graph);
 
         // clone the original cycles
 
@@ -61,7 +68,7 @@ module.exports = class GraphMinimizer {
             originalSize: cycles.length
         }
 
-        let goodPaths = this._selectMaxEdgeAlgorithm(graph, cycles, filter);
+        let goodPaths = this.algorithm.minimize(graph, cycles, filter);
 
         console.log("Found minimal number of covering cycles, cycle count = " + goodPaths.length);
 
@@ -74,92 +81,6 @@ module.exports = class GraphMinimizer {
             paths: this._groupPathsBySize(goodPaths),
             info: info
         };
-    }
-
-
-    /**
-     * Start from maximum length of cycles. While there is any edge in the graph, check if 
-     * there is a cycle which can remove the max amount of edges. If there is, then add it to the list.
-     * If there is no cycle, then decrease the max number, and re-check the cycles until no edge remains
-     * in the graph.
-     * 
-     * @param {*} graph The graph
-     * @param {*} cycles The cycles we want to check
-     * @param {*} filter Filter to be applied to each circle. Returns true, if the circle needs to be processed.
-     */
-    _selectMaxEdgeAlgorithm(graph, cycles, filter) {
-
-        let max = cycles.map(x => x.length).reduce((acc, x) => Math.max(acc, x));
-
-        let goodPaths = [];
-
-        let paths = cycles.map(path => ({ original: path, edges: path.map((node, i, array) => ({ v: node, w: array[(i + 1) % array.length] })) }));
-
-        while (graph.edgeCount() > 0 || max == 0) {
-
-            let found = false;
-
-            for (let path of paths) {
-
-                if (!filter(path.original)) {
-                    continue;
-                }
-
-                let edgeCount = path.edges.filter(edge => graph.hasEdge(edge)).length;
-
-                if (edgeCount === max) {
-                    found = true;
-                    path.edges.filter(edge => graph.hasEdge(edge)).forEach(edge => graph.removeEdge(edge));
-                    goodPaths.push(path.original);
-
-                    if (graph.edgeCount() == 0) {
-                        break;
-                    }
-                }
-
-            }
-
-            if (!found) {
-                max--;
-            }
-        }
-
-        return goodPaths;
-    }
-
-    _naiveAlgorithm(graph, cycles, filter) {
-        let goodPaths = [];
-
-        let paths = cycles.map(path => ({ original: path, edges: path.map((node, i, array) => ({ v: node, w: array[(i + 1) % array.length] })) }));
-
-        for (let path of paths) {
-
-            if (!filter(path.original)) {
-                continue;
-            }
-
-            // found at least an edge to be removed
-            let removedEdge = false;
-
-            // for every edge in the path
-            for (let edge of path.edges) {
-                if (graph.hasEdge(edge)) {
-                    removedEdge = true;
-                    graph.removeEdge(edge);
-                }
-            }
-
-            // if the path removed at least a single edge, add it to the list
-            if (removedEdge) {
-                goodPaths.push(path.original);
-            }
-
-            if (graph.edgeCount() == 0) {
-                break;
-            }
-        }
-
-        return goodPaths;
     }
 
     /**

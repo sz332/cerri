@@ -15,11 +15,13 @@ module.exports = class GraphCycleFinder {
     findCycles(maxCycleLength) {
         let result = [];
 
+        this.paths = {};
+
         console.log("Started parsing graph");
 
         this.graph.nodes().forEach(node => this.cycleRecursive(node, this.graph, [], result, maxCycleLength));
 
-        console.log("Starting simplifying the result");
+        console.log("Starting simplifying the result " + result.length + " cycles found");
 
         let retValue = this.unique(result);
 
@@ -31,7 +33,7 @@ module.exports = class GraphCycleFinder {
 
         retValue.sort(function(a, b) { return a.length - b.length; });
 
-        console.log("Finished simplifying the result");
+        console.log("Finished simplifying the result " + retValue.length);
 
         return retValue;
     }
@@ -52,8 +54,10 @@ module.exports = class GraphCycleFinder {
                     console.info("Found a cycle, path = " + path + " # of cycles = " + result.length);
                 }
 
+                let key = path.slice(0).sort().join(":")
                 path.push(current);
                 result.push(path);
+
                 return;
             }
 
@@ -73,6 +77,10 @@ module.exports = class GraphCycleFinder {
 
     };
 
+    getPathKey(path) {
+        return path.sort().join(":");
+    }
+    
     removeDuplicates(input) {
         return input.filter(function(item, pos, self) {
             return self.indexOf(item) == pos;

@@ -7,6 +7,7 @@ var GraphLoader = require("./graphLoader.js");
 var GraphCycleFinder = require("./graphCycleFinder.js");
 var GraphMinimizer = require("./graphMinimizer.js");
 var GraphStatistics = require("./graphStatistics.js");
+var AdvantageousMinimizer = require("./minimizers/advantageousMinimizer.js");
 
 const {
     performance
@@ -28,9 +29,9 @@ let graph = new GraphLoader("../data/cerri.json").load();
 
 let cycles = new GraphCycleFinder(graph).findCycles(MAX_CYCLE_LENGTH);
 
-// Among the cycles find the minimal amount which cover the whole graph
+// Among the cycles find the minimal amount which cover the whole graph using a provided algorithm
 
-let minimalCycles = new GraphMinimizer(graph).minimalCoveringCycles(cycles);
+let minimalCycles = new GraphMinimizer(graph, new AdvantageousMinimizer()).minimalCoveringCycles(cycles);
 
 // Display end result
 
