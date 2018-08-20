@@ -82,7 +82,7 @@ module.exports = class AdvantageousMinimizer {
                             if (mink == k) {
                                 console.log("Forced selection:" + mink + ":" + JSON.stringify(path.original));
                                 found = true;
-                                this.removeEdges(graph, path, goodPaths, edgeCountMap);
+                                this._removeEdges(graph, path, goodPaths, edgeCountMap);
                             }
                         }
                     }
@@ -115,7 +115,7 @@ module.exports = class AdvantageousMinimizer {
                         for (let e of path.edges) {
                             if (minK == e.v + ":" + e.w) {
 
-                                if (max === this.pathEdgeCount(graph, path)) {
+                                if (max === this._pathEdgeCount(graph, path)) {
                                     advantageous = true;
                                     break;
                                 }
@@ -125,7 +125,7 @@ module.exports = class AdvantageousMinimizer {
                         if (advantageous) {
                             console.log("Advantageous selection:" + minK + " " + JSON.stringify(path.original));
                             found = true;
-                            this.removeEdges(graph, path, goodPaths, edgeCountMap);
+                            this._removeEdges(graph, path, goodPaths, edgeCountMap);
                         }
                     }
 
@@ -142,9 +142,9 @@ module.exports = class AdvantageousMinimizer {
                     continue;
                 }
 
-                if (max === this.pathEdgeCount(graph, path)) {
+                if (max === this._pathEdgeCount(graph, path)) {
                     found = true;
-                    this.removeEdges(graph, path, goodPaths, edgeCountMap);
+                    this._removeEdges(graph, path, goodPaths, edgeCountMap);
                 }
             }
 
@@ -156,7 +156,7 @@ module.exports = class AdvantageousMinimizer {
         return goodPaths;
     }
 
-    pathEdgeCount(graph, path) {
+    _pathEdgeCount(graph, path) {
         return path.edges.filter(edge => graph.hasEdge(edge)).length;
     }
 
@@ -167,10 +167,10 @@ module.exports = class AdvantageousMinimizer {
      * @param {Array} goodPaths 
      * @param {Object} edgeMap 
      */
-    removeEdges(graph, path, goodPaths, edgeMap) {
+    _removeEdges(graph, path, goodPaths, edgeMap) {
         path.edges.filter(edge => graph.hasEdge(edge)).forEach(edge => graph.removeEdge(edge));
         goodPaths.push(path.original);
-        this.decreaseEdgeCount(edgeMap, path);
+        this._decreaseEdgeCount(edgeMap, path);
     }
 
     /**
@@ -178,7 +178,7 @@ module.exports = class AdvantageousMinimizer {
      * @param {Object} edgeMap 
      * @param {Object} p 
      */
-    decreaseEdgeCount(edgeMap, p) {
+    _decreaseEdgeCount(edgeMap, p) {
         for (let edge of p.edges) {
             let k = edge.v + ":" + edge.w;
             delete edgeMap[k];
