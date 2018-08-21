@@ -24,7 +24,7 @@ let start = performance.now();
 
 // Load the graph
 
-let data = new GraphLoader("../data/cerri.json").load();
+let data = new GraphLoader("../data/cerri/cerri.json").load();
 let graph = data.graph;
 
 // Find the cycles
