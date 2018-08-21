@@ -3,11 +3,11 @@
 // broke the browser. Running as a separate application this shall be not a problem
 // hopefully
 
-var GraphLoader = require("./graphLoader.js");
-var GraphCycleFinder = require("./graphCycleFinder.js");
-var GraphMinimizer = require("./graphMinimizer.js");
-var GraphStatistics = require("./graphStatistics.js");
-var AdvantageousMinimizer = require("./minimizers/advantageousMinimizer.js");
+var GraphLoader = require("./src/graphLoader.js");
+var GraphCycleFinder = require("./src/graphCycleFinder.js");
+var GraphMinimizer = require("./src/graphMinimizer.js");
+var GraphStatistics = require("./src/graphStatistics.js");
+var AdvantageousMinimizer = require("./src/minimizers/advantageousMinimizer.js");
 
 const {
     performance

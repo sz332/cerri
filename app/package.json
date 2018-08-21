@@ -9,6 +9,7 @@
   "author": "",
   "license": "GPL-3.0",
   "dependencies": {
-    "graphlib": "^2.1.5"
+    "graphlib": "^2.1.5",
+    "pdfkit": "^0.8.3"
   }
 }
