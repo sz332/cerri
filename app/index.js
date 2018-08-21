@@ -59,11 +59,8 @@ console.log("Goodness ratio = " + parseFloat(cycleGoodness.ratio).toFixed(3));
 console.log("Cycles have " + (parseFloat((cycleGoodness.ratio - 1) * 100).toFixed(0)) + " % more edges than the original graph (learning cost)");
 
 // generate pdf
-
-console.log("Generating pdf");
-
 let generator = new PdfGenerator(data.data.nodes, minimalCycles.paths.map(x => x.data).reduce((a, b) => a.concat(b), []));
-generator.generate("./output.pdf");
+generator.generate("output.pdf");
 
 // Display time spent for calculating the result
 console.info("Ended in " + (duration / 1000) + " sec");
