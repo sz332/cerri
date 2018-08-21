@@ -8,6 +8,7 @@ var GraphCycleFinder = require("./src/graphCycleFinder.js");
 var GraphMinimizer = require("./src/graphMinimizer.js");
 var GraphStatistics = require("./src/graphStatistics.js");
 var AdvantageousMinimizer = require("./src/minimizers/advantageousMinimizer.js");
+var PdfGenerator = require("./src/pdfGenerator.js");
 
 const {
     performance
@@ -23,7 +24,8 @@ let start = performance.now();
 
 // Load the graph
 
-let graph = new GraphLoader("../data/cerri.json").load();
+let data = new GraphLoader("../data/cerri.json").load();
+let graph = data.graph;
 
 // Find the cycles
 
@@ -55,6 +57,13 @@ console.log("Edge count in graph = " + cycleGoodness.graphEdgeCount);
 console.log("Edge count in cycles = " + cycleGoodness.cyclesEdgeCount);
 console.log("Goodness ratio = " + parseFloat(cycleGoodness.ratio).toFixed(3));
 console.log("Cycles have " + (parseFloat((cycleGoodness.ratio - 1) * 100).toFixed(0)) + " % more edges than the original graph (learning cost)");
+
+// generate pdf
+
+console.log("Generating pdf");
+
+let generator = new PdfGenerator(data.data.nodes, minimalCycles.paths.map(x => x.data).reduce((a, b) => a.concat(b), []));
+generator.generate("./output.pdf");
 
 // Display time spent for calculating the result
 console.info("Ended in " + (duration / 1000) + " sec");

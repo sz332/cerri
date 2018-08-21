@@ -3,25 +3,25 @@
 let Graph = require("graphlib").Graph;
 let Fs = require('fs');
 
-module.exports = class GraphLoader{
+module.exports = class GraphLoader {
 
-    constructor(fileName){
+    constructor(fileName) {
         this.fileName = fileName;
     }
 
-    load(){
+    load() {
         return this.createGraph(this.fileName);
     }
 
     convertJsonToGraph(json) {
         let data = {};
-    
+
         data.nodes = json.nodes;
         data.edges = [];
-    
+
         for (let item of json.edges) {
             for (let toNode of item.toList) {
-    
+
                 if (typeof toNode === 'string' || toNode instanceof String) {
                     data.edges.push({
                         "from": item.from,
@@ -33,26 +33,30 @@ module.exports = class GraphLoader{
                         "to": toNode.name
                     });
                 }
-    
+
             }
         }
-    
+
         return data;
     }
-    
+
     createGraph(fileName) {
-        let graphData = this.convertJsonToGraph(JSON.parse(Fs.readFileSync(fileName, 'utf8')));
+        let data = JSON.parse(Fs.readFileSync(fileName, 'utf8'));
+
+        let graphData = this.convertJsonToGraph(data);
         let graph = new Graph({ directed: true });
-    
+
         for (let node of graphData.nodes) {
             graph.setNode(node.id, node.label);
         }
-    
+
         for (let edge of graphData.edges) {
             graph.setEdge(edge.from, edge.to);
         }
-    
-        return graph;
+
+        return {
+            data: data,
+            graph: graph
+        }
     }
 }
-
