@@ -16,6 +16,7 @@ var GraphMinimizer = require("./src/graphMinimizer.js");
 var GraphStatistics = require("./src/graphStatistics.js");
 var AdvantageousMinimizer = require("./src/minimizers/advantageousMinimizer.js");
 var PdfGenerator = require("./src/pdfGenerator.js");
+var path = require('path')
 
 const {
     performance
@@ -66,7 +67,7 @@ console.log("Goodness ratio = " + parseFloat(cycleGoodness.ratio).toFixed(3));
 console.log("Cycles have " + (parseFloat((cycleGoodness.ratio - 1) * 100).toFixed(0)) + " % more edges than the original graph (learning cost)");
 
 // generate pdf
-let generator = new PdfGenerator(data.data.nodes, minimalCycles.paths.map(x => x.data).reduce((a, b) => a.concat(b), []));
+let generator = new PdfGenerator(data.data.nodes, minimalCycles.paths.map(x => x.data).reduce((a, b) => a.concat(b), []), path.resolve(__dirname, '../data/cerri'));
 generator.generate("output.pdf");
 
 // Display time spent for calculating the result
