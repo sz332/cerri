@@ -26,6 +26,7 @@ module.exports = class PdfGenerator {
 
         let doc = new PDFDocument({ bufferPages: true, size: 'A4', margin: 50, layout: "landscape" });
         doc.pipe(fs.createWriteStream('output.pdf'));
+        doc.fontSize(10);
 
         // coordinates in points = (72 point per inch)
         // 11.7 inch wide, 8.3 inch tall in landscape mode
@@ -45,16 +46,18 @@ module.exports = class PdfGenerator {
             let columnPosition = 0;
             const columnWidth = doc.page.width / path.length;
 
+            let headers = this._generateHeader(path.length);
+
             for (let nodeId of path) {
 
                 let node = this._findNodeById(nodeId);
 
                 let imageCoordinate = { x: columnPosition * columnWidth, y: row * (nodeHeightInPoints + spaceBetweenRowsInPoints) };
-                let nodeLabelCoordinate = { x: columnPosition * columnWidth, y: imageCoordinate.y + nodeHeightInPoints + 5 };
+                let nodeLabelCoordinate = { x: 5 + columnPosition * columnWidth, y: imageCoordinate.y + nodeHeightInPoints + 5 };
 
                 doc.image(filePath.resolve(this.rootPath, node.image), imageCoordinate.x, imageCoordinate.y, { fit: [columnWidth, nodeHeightInPoints] });
                 doc.rect(imageCoordinate.x, imageCoordinate.y, columnWidth, nodeHeightInPoints).stroke()
-                doc.text(node.label, nodeLabelCoordinate.x, nodeLabelCoordinate.y, { width: columnWidth });
+                doc.text("(" + headers[columnPosition] + ") " + node.label, nodeLabelCoordinate.x, nodeLabelCoordinate.y, { width: columnWidth });
 
                 columnPosition++;
             }
@@ -70,6 +73,19 @@ module.exports = class PdfGenerator {
 
         doc.flushPages();
         doc.end();
+    }
+
+    _generateHeader(length) {
+
+        let data = ["A", "B", "B", "A"];
+
+        let result = [];
+
+        for (let i = 0; i < length; i++) {
+            result.push(data[i % data.length]);
+        }
+
+        return result;
     }
 
     _findNodeById(id) {

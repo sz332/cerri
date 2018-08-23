@@ -75,7 +75,7 @@
         },
         {
             "id": "falseSecondaHandsInPrimaParry",
-            "label": "False seconda with the hands in Prima parry",
+            "label": "False seconda in Prima parry",
             "image": "images/falseSecondaHandsInPrimaParry.png",
             "type": "parry"
         },
