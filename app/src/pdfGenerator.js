@@ -50,18 +50,18 @@ module.exports = class PdfGenerator {
                 let node = this._findNodeById(nodeId);
 
                 let imageCoordinate = { x: columnPosition * columnWidth, y: row * (nodeHeightInPoints + spaceBetweenRowsInPoints) };
-                let nodeLabelCoordinate = { x: columnPosition * columnWidth, y: imageCoordinate.y + nodeHeightInPoints + 20 };
+                let nodeLabelCoordinate = { x: columnPosition * columnWidth, y: imageCoordinate.y + nodeHeightInPoints + 5 };
 
                 doc.image(filePath.resolve(this.rootPath, node.image), imageCoordinate.x, imageCoordinate.y, { fit: [columnWidth, nodeHeightInPoints] });
                 doc.rect(imageCoordinate.x, imageCoordinate.y, columnWidth, nodeHeightInPoints).stroke()
-                doc.text(node.label, nodeLabelCoordinate.x, nodeLabelCoordinate.y);
+                doc.text(node.label, nodeLabelCoordinate.x, nodeLabelCoordinate.y, { width: columnWidth });
 
                 columnPosition++;
             }
 
             row++;
 
-            if (((row + 1 ) * (nodeHeightInPoints + spaceBetweenRowsInPoints)) > doc.page.height) {
+            if (((row + 1) * (nodeHeightInPoints + spaceBetweenRowsInPoints)) > doc.page.height) {
                 doc.addPage();
                 row = 0;
             }
