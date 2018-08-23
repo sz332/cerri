@@ -4,150 +4,150 @@
         {
             "id": "quartaParry",
             "label": "Quarta parry",
-            "image": "images/quartaParry-small.png",
+            "image": "images/quartaParry.png",
             "type": "parry"
         },
         {
             "id": "terzaParry",
             "label": "Terza parry",
-            "image": "images/terzaParry-small.png",
+            "image": "images/terzaParry.png",
             "type": "parry"
         },
         {
             "id": "cerchioParry",
             "label": "Cerchio parry",
-            "image": "images/cerchioParry-small.png",
+            "image": "images/cerchioParry.png",
             "type": "parry"
         },
         {
             "id": "secondaParry",
             "label": "Seconda parry",
-            "image": "images/secondaParry-small.png",
+            "image": "images/secondaParry.png",
             "type": "parry"
         },
         {
             "id": "primaParry",
             "label": "Prima parry",
-            "image": "images/primaParry-small.png",
+            "image": "images/primaParry.png",
             "type": "parry"
         },
         {
             "id": "lowQuartaParry",
             "label": "Low Quarta parry",
-            "image": "images/lowQuartaParry-small.png",
+            "image": "images/lowQuartaParry.png",
             "type": "parry"
         },
         {
             "id": "lowTerzaParry",
             "label": "Low Terza parry",
-            "image": "images/lowTerzaParry-small.png",
+            "image": "images/lowTerzaParry.png",
             "type": "parry"
         },
         {
             "id": "highPrimaParry",
             "label": "High Prima parry",
-            "image": "images/highPrimaParry-small.png",
+            "image": "images/highPrimaParry.png",
             "type": "parry"
         },
         {
             "id": "highSecondaParry",
             "label": "High Seconda parry",
-            "image": "images/highSecondaParry-small.png",
+            "image": "images/highSecondaParry.png",
             "type": "parry"
         },
         {
             "id": "falseSecondaParry",
             "label": "False Seconda parry",
-            "image": "images/falseSecondaParry-small.png",
+            "image": "images/falseSecondaParry.png",
             "type": "parry"
         },
         {
             "id": "falsePrimaParry",
             "label": "False Prima parry",
-            "image": "images/falsePrimaParry-small.png",
+            "image": "images/falsePrimaParry.png",
             "type": "parry"
         },
         {
             "id": "falseHeadParry",
             "label": "False Head parry",
-            "image": "images/falseHeadParry-small.png",
+            "image": "images/falseHeadParry.png",
             "type": "parry"
         },
         {
             "id": "falseSecondaHandsInPrimaParry",
             "label": "False seconda with the hands in Prima parry",
-            "image": "images/falseSecondaHandsInPrimaParry-small.png",
+            "image": "images/falseSecondaHandsInPrimaParry.png",
             "type": "parry"
         },
         {
             "id": "falseParryOfMontante",
             "label": "False parry of montante",
-            "image": "images/falseParryOfMontante-small.png",
+            "image": "images/falseParryOfMontante.png",
             "type": "parry"
         },
         {
             "id": "insideHeadBlow",
             "label": "Inside head blow",
-            "image": "images/insideHeadBlow-small.png",
+            "image": "images/insideHeadBlow.png",
             "type": "attack"
         },
         {
             "id": "outsideHeadBlow",
             "label": "Outside head blow",
-            "image": "images/outsideHeadBlow-small.png",
+            "image": "images/outsideHeadBlow.png",
             "type": "attack"
         },
         {
             "id": "insideFaceBlow",
             "label": "Inside face blow",
-            "image": "images/insideFaceBlow-small.png",
+            "image": "images/insideFaceBlow.png",
             "type": "attack"
         }, {
             "id": "outsideFaceBlow",
             "label": "Outside face blow",
-            "image": "images/outsideFaceBlow-small.png",
+            "image": "images/outsideFaceBlow.png",
             "type": "attack"
         }, {
             "id": "insideFlankBlow",
             "label": "Inside flank blow",
-            "image": "images/insideFlankBlow-small.png",
+            "image": "images/insideFlankBlow.png",
             "type": "attack"
         }, {
             "id": "outsideFlankBlow",
             "label": "Outside flank blow",
-            "image": "images/outsideFlankBlow-small.png",
+            "image": "images/outsideFlankBlow.png",
             "type": "attack"
         }, {
             "id": "insideLegBlow",
             "label": "Inside leg blow",
-            "image": "images/insideLegBlow-small.png",
+            "image": "images/insideLegBlow.png",
             "type": "attack"
         }, {
             "id": "outsideLegBlow",
             "label": "Outside leg blow",
-            "image": "images/outsideLegBlow-small.png",
+            "image": "images/outsideLegBlow.png",
             "type": "attack"
         }, {
             "id": "insideMontanteBlow",
             "label": "Inside montante blow",
-            "image": "images/insideMontanteBlow-small.png",
+            "image": "images/insideMontanteBlow.png",
             "type": "attack"
         },
         {
             "id": "outsideMontanteBlow",
             "label": "Outside montante blow",
-            "image": "images/outsideMontanteBlow-small.png",
+            "image": "images/outsideMontanteBlow.png",
             "type": "attack"
         },
         {
             "id": "thrust",
             "label": "Thrust",
-            "image": "images/thrust-small.png",
+            "image": "images/thrust.png",
             "type": "attack"
         }, {
             "id": "reverseBlow",
             "label": "Reverse blow",
-            "image": "images/reverseBlow-small.png",
+            "image": "images/reverseBlow.png",
             "type": "attack"
         }
     ],
