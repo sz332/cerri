@@ -37,7 +37,7 @@ module.exports = class AdvantageousMinimizer {
         }
 
         while (graph.edgeCount() > 0 || max == 0) {
-            console.log("Remaining edges:" + graph.edgeCount() + " " + max);
+            // console.log("Remaining edges:" + graph.edgeCount() + " " + max);
 
             // mi a minimális száma ennek a hány körben fordul előnek
 
@@ -64,7 +64,7 @@ module.exports = class AdvantageousMinimizer {
             // check out if any of the minOcc would decrease by current max
             // because then it is worth to use that one and not randomly another
 
-            console.log("Statistics:" + minOccurance + ": rest:" + JSON.stringify(ech));
+            // console.log("Statistics:" + minOccurance + ": rest:" + JSON.stringify(ech));
 
             let found = false;
 
@@ -78,7 +78,7 @@ module.exports = class AdvantageousMinimizer {
                         for (let i = 0; i < path.edges.length; i++) {
                             let k = path.edges[i].v + ":" + path.edges[i].w;
                             if (min_k == k) {
-                                console.log("Forced selection:" + min_k + ":" + JSON.stringify(path.original));
+                                //console.log("Forced selection:" + min_k + ":" + JSON.stringify(path.original));
                                 found = true;
                                 this._removeEdges(graph, path, goodPaths, edgeCountMap);
                             }
@@ -121,7 +121,7 @@ module.exports = class AdvantageousMinimizer {
                         }
 
                         if (advantageous) {
-                            console.log("Advantageous selection:" + minK + " " + JSON.stringify(path.original));
+                            //console.log("Advantageous selection:" + minK + " " + JSON.stringify(path.original));
                             found = true;
                             this._removeEdges(graph, path, goodPaths, edgeCountMap);
                         }

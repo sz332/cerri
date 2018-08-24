@@ -11,22 +11,22 @@ module.exports = class PdfGenerator {
      * @param {Array} nodes 
      * @param {Array} paths 
      */
-    constructor(nodes, paths, dataDirectory, outputFile) {
+    constructor(nodes, paths, dataDirectory) {
         this.nodes = nodes;
         this.paths = paths;
         this.dataDirectory = dataDirectory;
-        this.outputFile = outputFile;
     }
 
     /**
+     * Export graph as PDF 
      * 
-     * @param {string} url
+     * @param {string} outputFile Export file location
      */
-    generate(url) {
-        console.log("Exporting to pdf...");
+    generate(outputFile) {
+        console.log("Exporting graph to " + outputFile);
 
         let doc = new PDFDocument({ bufferPages: true, size: 'A4', margin: 50, layout: "landscape" });
-        doc.pipe(fs.createWriteStream(this.outputFile));
+        doc.pipe(fs.createWriteStream(outputFile));
         doc.fontSize(10);
 
         // coordinates in points = (72 point per inch)

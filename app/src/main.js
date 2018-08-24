@@ -58,34 +58,17 @@ module.exports = class Main {
 
         let minimalCycles = new GraphMinimizer(graph, new AdvantageousMinimizer()).minimalCoveringCycles(cycles);
 
-        // Display end result
-
-        let duration = performance.now() - start;
-
-        for (let pathObject of minimalCycles.paths) {
-            console.log("\n Exercises of " + pathObject.length + " moves: \n");
-
-            let counter = 1;
-
-            for (let path of pathObject.data) {
-                console.info(counter++ + ". " + path.join(", "));
-            }
-        }
-
         // Display statistics about the graph
-
-        let cycleGoodness = new GraphStatistics(graph).getCycleGoodness(minimalCycles.paths);
-
-        console.log("Edge count in graph = " + cycleGoodness.graphEdgeCount);
-        console.log("Edge count in cycles = " + cycleGoodness.cyclesEdgeCount);
-        console.log("Goodness ratio = " + parseFloat(cycleGoodness.ratio).toFixed(3));
-        console.log("Cycles have " + (parseFloat((cycleGoodness.ratio - 1) * 100).toFixed(0)) + " % more edges than the original graph (learning cost)");
+        let statistics = new GraphStatistics(graph, minimalCycles.paths);
+        statistics.printExercises();
+        statistics.printCycleGoodness();
 
         // generate pdf
-        let generator = new PdfGenerator(data.data.nodes, minimalCycles.paths.map(x => x.data).reduce((a, b) => a.concat(b), []), DIR_LOCATION, EXPORT_LOCATION);
-        generator.generate("output.pdf");
+        let generator = new PdfGenerator(data.data.nodes, minimalCycles.paths.map(x => x.data).reduce((a, b) => a.concat(b), []), DIR_LOCATION);
+        generator.generate(EXPORT_LOCATION);
 
         // Display time spent for calculating the result
+        let duration = performance.now() - start;
         console.info("Ended in " + (duration / 1000) + " sec");
     }
 
