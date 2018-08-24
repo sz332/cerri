@@ -84,6 +84,8 @@ module.exports = class GraphMinimizer {
     }
 
     /**
+     * FIXME in certain cases this code does not work correctly :( 
+     * 
      * Groups paths by length
      * @param {*} pathList 
      */

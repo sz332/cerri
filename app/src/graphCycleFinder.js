@@ -124,7 +124,9 @@ module.exports = class GraphCycleFinder {
 
                 let duration = performance.now() - start;
 
-                console.info("Working on item " + counter + " of " + list.length + " [" + duration + "] msec");
+                let remaining = (((((list.length - counter) / 5000) * duration) / 1000) / 60).toFixed(1);
+
+                console.info("Working on item " + counter + " of " + list.length + " [" + duration.toFixed(0) + "] msec, finishing in ~" + remaining + " minutes");
 
                 start = performance.now();
             }
