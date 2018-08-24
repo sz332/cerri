@@ -11,10 +11,11 @@ module.exports = class PdfGenerator {
      * @param {Array} nodes 
      * @param {Array} paths 
      */
-    constructor(nodes, paths, rootPath) {
+    constructor(nodes, paths, dataDirectory, outputFile) {
         this.nodes = nodes;
         this.paths = paths;
-        this.rootPath = rootPath;
+        this.dataDirectory = dataDirectory;
+        this.outputFile = outputFile;
     }
 
     /**
@@ -25,7 +26,7 @@ module.exports = class PdfGenerator {
         console.log("Exporting to pdf...");
 
         let doc = new PDFDocument({ bufferPages: true, size: 'A4', margin: 50, layout: "landscape" });
-        doc.pipe(fs.createWriteStream('output.pdf'));
+        doc.pipe(fs.createWriteStream(this.outputFile));
         doc.fontSize(10);
 
         // coordinates in points = (72 point per inch)
@@ -55,7 +56,7 @@ module.exports = class PdfGenerator {
                 let imageCoordinate = { x: columnPosition * columnWidth, y: row * (nodeHeightInPoints + spaceBetweenRowsInPoints) };
                 let nodeLabelCoordinate = { x: 5 + columnPosition * columnWidth, y: imageCoordinate.y + nodeHeightInPoints + 5 };
 
-                doc.image(filePath.resolve(this.rootPath, node.image), imageCoordinate.x, imageCoordinate.y, { fit: [columnWidth, nodeHeightInPoints] });
+                doc.image(filePath.resolve(this.dataDirectory, node.image), imageCoordinate.x, imageCoordinate.y, { fit: [columnWidth, nodeHeightInPoints] });
                 doc.rect(imageCoordinate.x, imageCoordinate.y, columnWidth, nodeHeightInPoints).stroke()
                 doc.text("(" + headers[columnPosition] + ") " + node.label, nodeLabelCoordinate.x, nodeLabelCoordinate.y, { width: columnWidth });
 

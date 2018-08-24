@@ -1,7 +1,5 @@
 // TODO
 
-// Use argument parser [https://www.npmjs.com/package/argparse]
-// Add images for Cerry
 // Use modular folder structure for various parts: graph loaders, graph parsers, graph transformations, graph statistics, graph exporters, etc.
 // ...
 
@@ -16,15 +14,67 @@ var GraphMinimizer = require("./src/graphMinimizer.js");
 var GraphStatistics = require("./src/graphStatistics.js");
 var AdvantageousMinimizer = require("./src/minimizers/advantageousMinimizer.js");
 var PdfGenerator = require("./src/pdfGenerator.js");
+var ArgumentParser = require('argparse').ArgumentParser;
 var path = require('path')
 
 const {
     performance
 } = require('perf_hooks');
 
+// [ Here it starts ]----------------------------------------------------------------------
+
+let parser = new ArgumentParser({
+    version: '1.0.0',
+    addHelp: true,
+    description: 'FencingAutomat drill generator'
+});
+
+parser.addArgument(
+    '--maxCycleLength', {
+        help: 'Maximum cycle length',
+        defaultValue: 6
+    }
+);
+
+parser.addArgument(
+    '--dataDir', {
+        help: 'Data directory where the graph description file reside',
+        defaultValue: '../data/cerri'
+    }
+);
+
+parser.addArgument(
+    '--graphFileName', {
+        help: 'The name of the graph file inside --dataDir',
+        defaultValue: 'graph.json'
+    }
+);
+
+parser.addArgument(
+    '--export', {
+        help: 'The name of the pdf file',
+        defaultValue: 'graph.pdf'
+    }
+);
+
+let args = parser.parseArgs();
+
+console.info("Starting application...");
+
 // Maximum number of moves in a drill. Setting it to 6 requires around 6 seconds, 
 // setting it to 8 requires around 10 minutes on a core i3 desktop processor
-const MAX_CYCLE_LENGTH = 6
+
+const MAX_CYCLE_LENGTH = args.maxCycleLength;
+const DIR_LOCATION = path.resolve(args.dataDir);
+const GRAPH_LOCATION = path.resolve(args.dataDir, args.graphFileName);
+const EXPORT_LOCATION = path.resolve(args.export);
+
+// display argument informations
+
+console.info("Maximum length of the cycle: " + MAX_CYCLE_LENGTH);
+console.info("Data directory: " + DIR_LOCATION);
+console.info("Graph file location: " + GRAPH_LOCATION);
+console.info("Output file location: " + EXPORT_LOCATION);
 
 // Start performance measurement
 
@@ -32,7 +82,7 @@ let start = performance.now();
 
 // Load the graph
 
-let data = new GraphLoader("../data/cerri/cerri.json").load();
+let data = new GraphLoader(GRAPH_LOCATION).load();
 let graph = data.graph;
 
 // Find the cycles
@@ -67,7 +117,7 @@ console.log("Goodness ratio = " + parseFloat(cycleGoodness.ratio).toFixed(3));
 console.log("Cycles have " + (parseFloat((cycleGoodness.ratio - 1) * 100).toFixed(0)) + " % more edges than the original graph (learning cost)");
 
 // generate pdf
-let generator = new PdfGenerator(data.data.nodes, minimalCycles.paths.map(x => x.data).reduce((a, b) => a.concat(b), []), path.resolve(__dirname, '../data/cerri'));
+let generator = new PdfGenerator(data.data.nodes, minimalCycles.paths.map(x => x.data).reduce((a, b) => a.concat(b), []), DIR_LOCATION, EXPORT_LOCATION);
 generator.generate("output.pdf");
 
 // Display time spent for calculating the result
