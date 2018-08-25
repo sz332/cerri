@@ -79,7 +79,6 @@ module.exports = class AdvantageousMinimizer {
                             let k = path.edges[i].v + ":" + path.edges[i].w;
                             if (min_k == k) {
                                 //console.log("Forced selection:" + min_k + ":" + JSON.stringify(path.original));
-                                found = true;
                                 this._removeEdges(graph, path, goodPaths, edgeCountMap);
                             }
                         }
