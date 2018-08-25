@@ -1,22 +1,27 @@
 class GraphVisualizer {
 
-    constructor(graphComponent) {
+    constructor(graphComponent, tableComponent) {
         this.graphComponent = graphComponent;
+        this.tableComponent = tableComponent;
     }
 
     initGraph(data) {
-        console.log("Init graph called");
+        console.info("Init graph called");
 
-        let graphData = this._processData(data);
+        this.graphData = this._processData(data);
 
-        graphData.edges.forEach(element => {
+        this.graphData.edges.forEach(element => {
             element.arrows = "to";
             element.length = 200;
+            element.color = { highlight: '#ff0000' };
         });
 
+        this.nodesDataSet = new vis.DataSet(this.graphData.nodes);
+        this.edgesDataSet = new vis.DataSet(this.graphData.edges);
+
         let graph = {
-            nodes: new vis.DataSet(graphData.nodes),
-            edges: new vis.DataSet(graphData.edges)
+            nodes: this.nodesDataSet,
+            edges: this.edgesDataSet
         };
 
         let options = {
@@ -36,14 +41,51 @@ class GraphVisualizer {
                 font: {
                     color: 'black'
                 }
-            },
-            edges: {
-                color: 'darkgray'
             }
         };
 
         this.network = new vis.Network(this.graphComponent, graph, options);
-        //this.network.on("select", this._nodeSelected.bind(this));
+    }
+
+    setCyclesResult(data) {
+        console.info("Setting cycles result");
+        this.cycles = data.paths;
+
+        for (let pathObject of data.paths) {
+
+            for (let path of pathObject.data) {
+                let row = document.createElement('div');
+                row._path = path;
+
+                row.className = 'cycle';
+                row.innerHTML = path.join(", ");
+
+                let that = this;
+
+                row.addEventListener("click", function() { that._selectPath(this, this._path); });
+
+                this.tableComponent.appendChild(row);
+            }
+        }
+    }
+
+    _selectPath(component, path) {
+
+        let edgeIds = [];
+
+        for (let i = 0; i < path.length; i++) {
+
+            const from = path[i];
+            const to = path[(i + 1) % path.length];
+
+            let edgeId = this.edgesDataSet.get().filter(x => x.from === from && x.to === to).map(x => x.id)[0];
+
+            if (edgeId) {
+                edgeIds.push(edgeId);
+            }
+        }
+
+        this.network.selectEdges(edgeIds);
     }
 
     _processData(newValue) {
