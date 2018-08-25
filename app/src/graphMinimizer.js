@@ -84,46 +84,25 @@ module.exports = class GraphMinimizer {
     }
 
     /**
-     * FIXME in certain cases this code does not work correctly :( 
      * 
      * Groups paths by length
-     * @param {*} pathList 
+     * @param {Array} pathList 
      */
     _groupPathsBySize(pathList) {
-
-        let lastSize = 0;
-        let sameSizeList = [];
-
         let list = [];
 
         for (let path of pathList) {
 
-            if (lastSize == 0) {
-                lastSize = path.length;
-            }
+            let o = list.find(x => x.length == path.length);
 
-            if (path.length == lastSize) {
-                sameSizeList.push(path);
+            if (!o) {
+                list.push({ length: path.length, data: [path] });
             } else {
-                list.push({
-                    length: lastSize,
-                    data: sameSizeList
-                });
-
-                sameSizeList = [];
-                sameSizeList.push(path);
-                lastSize = path.length;
+                o.data.push(path);
             }
         }
 
-        if (lastSize !== 0) {
-            list.push({
-                length: lastSize,
-                data: sameSizeList
-            });
-        }
-
-        return list;
-    };
+        return list.sort((a, b) => a.length - b.length);
+    }
 
 }
