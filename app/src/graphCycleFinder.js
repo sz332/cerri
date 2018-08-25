@@ -146,7 +146,7 @@ module.exports = class GraphCycleFinder {
                 });
             }
 
-        };
+        }
 
         return result.map(x => x.original);
     }
