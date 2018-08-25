@@ -1,7 +1,9 @@
 'use strict';
 
 let Graph = require("graphlib").Graph;
-const express = require('express')
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = class GraphVisualizer {
 
@@ -23,6 +25,7 @@ module.exports = class GraphVisualizer {
 
     visualize() {
         // write out data into static folder
+        fs.writeFileSync(path.join(this.config.staticDirLocation, 'cyclesResult.json'), JSON.stringify(this.cyclesResult));
 
         // start http server
         const app = express();
