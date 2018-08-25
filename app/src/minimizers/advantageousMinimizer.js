@@ -1,5 +1,6 @@
 'use strict';
 
+let RemainingFinder = require("./remainingFinder.js");
 let Graph = require("graphlib").Graph;
 
 module.exports = class AdvantageousMinimizer {
@@ -23,7 +24,7 @@ module.exports = class AdvantageousMinimizer {
         let edgeCountMap = {};
 
         // calculate the number of every edge used in a cycle
-        
+
         for (let cycle of cycles) {
             for (let i = 0; i < cycle.length; i++) {
                 let k = cycle[i] + ":" + (i == cycle.length - 1 ? cycle[0] : cycle[i + 1]);
@@ -36,7 +37,7 @@ module.exports = class AdvantageousMinimizer {
             }
         }
 
-        while (graph.edgeCount() > 0 || max == 0) {
+        while ((graph.edgeCount() > 0) && (max !== 0)) {
             // console.log("Remaining edges:" + graph.edgeCount() + " " + max);
 
             // mi a minimális száma ennek a hány körben fordul előnek
@@ -149,6 +150,11 @@ module.exports = class AdvantageousMinimizer {
             if (!found) {
                 max--;
             }
+        }
+
+        if (graph.edgeCount() > 0) {
+            let finder = new RemainingFinder(cycles, graph.edges());
+            finder.print();
         }
 
         return goodPaths;

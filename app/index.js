@@ -36,7 +36,7 @@ class App {
         parser.addArgument(
             '--dataDir', {
                 help: 'Data directory where the graph description file reside',
-                defaultValue: '../data/cerri'
+                defaultValue: '../data/leboucher'
             }
         );
 

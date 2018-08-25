@@ -1,6 +1,7 @@
 'use strict';
 
 let Graph = require("graphlib").Graph;
+let RemainingFinder = require("./remainingFinder.js");
 
 module.exports = class MaxCycleFirstMinimizer {
 
@@ -22,7 +23,7 @@ module.exports = class MaxCycleFirstMinimizer {
 
         let paths = cycles.map(path => ({ original: path, edges: path.map((node, i, array) => ({ v: node, w: array[(i + 1) % array.length] })) }));
 
-        while (graph.edgeCount() > 0 || max == 0) {
+        while ((graph.edgeCount() > 0) && (max !== 0)) {
 
             let found = false;
 
@@ -49,6 +50,11 @@ module.exports = class MaxCycleFirstMinimizer {
             if (!found) {
                 max--;
             }
+        }
+
+        if (graph.edgeCount() > 0) {
+            let finder = new RemainingFinder(cycles, graph.edges());
+            finder.print();
         }
 
         return goodPaths;

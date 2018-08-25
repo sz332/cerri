@@ -1,6 +1,7 @@
 'use strict';
 
 let Graph = require("graphlib").Graph;
+let RemainingFinder = require("./remainingFinder.js");
 
 module.exports = class NaiveMinimizer {
 
@@ -42,6 +43,11 @@ module.exports = class NaiveMinimizer {
             if (graph.edgeCount() == 0) {
                 break;
             }
+        }
+
+        if (graph.edgeCount() > 0) {
+            let finder = new RemainingFinder(cycles, graph.edges());
+            finder.print();
         }
 
         return goodPaths;

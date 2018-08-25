@@ -6,6 +6,8 @@ var GraphMinimizer = require("./graphMinimizer.js");
 var GraphStatistics = require("./graphStatistics.js");
 var GraphCycleSorter = require("./graphCycleSorter.js");
 var AdvantageousMinimizer = require("./minimizers/advantageousMinimizer.js");
+var MaxCycleFirstMinimizer = require("./minimizers/maxCycleFirstMinimizer.js");
+var NaiveMinimizer = require("./minimizers/naiveMinimizer.js");
 var PdfGenerator = require("./pdfGenerator.js");
 var path = require('path');
 
@@ -56,7 +58,7 @@ module.exports = class Main {
 
         // Among the cycles find the minimal amount which cover the whole graph using a provided algorithm
 
-        let minimalCycles = new GraphMinimizer(graph, new AdvantageousMinimizer()).minimalCoveringCycles(cycles);
+        let minimalCycles = new GraphMinimizer(graph, new MaxCycleFirstMinimizer()).minimalCoveringCycles(cycles);
 
         // Display statistics about the graph
         let statistics = new GraphStatistics(graph, minimalCycles.paths);
