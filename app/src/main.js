@@ -80,6 +80,7 @@ module.exports = class Main {
 
         // Among the cycles find the minimal amount which cover the whole graph using a provided algorithm
 
+        // FIXME this one is not nice yet, need to return remaining edges as well...
         let minimalCycles = new GraphMinimizer(graph, MINIMIZER).minimalCoveringCycles(cycles);
 
         // Display statistics about the graph
