@@ -1,12 +1,21 @@
 class GraphVisualizer {
 
-    constructor(graphComponent, tableComponent) {
+    constructor(toolbarComponent, graphComponent, tableComponent, configComponent) {
+        this.toolbarComponent = toolbarComponent;
         this.graphComponent = graphComponent;
         this.tableComponent = tableComponent;
+        this.configComponent = configComponent;
+        this.displayConfigPanel = true;
     }
 
+    /**
+     * 
+     * @param {*} data 
+     */
     initGraph(data) {
         console.info("Init graph called");
+
+        this._createToolbarComponent(this.toolbarComponent);
 
         this.graphData = this._processData(data);
 
@@ -29,7 +38,19 @@ class GraphVisualizer {
             width: '100wv',
             height: '600px',
             physics: {
-                enabled: false
+                stabilization: false
+            },
+            configure: {
+                filter: function(option, path) {
+                    if (path.indexOf('physics') !== -1) {
+                        return true;
+                    }
+                    if (path.indexOf('smooth') !== -1 || option === 'smooth') {
+                        return true;
+                    }
+                    return false;
+                },
+                container: this.configComponent
             },
             nodes: {
                 borderWidth: 3,
@@ -47,6 +68,10 @@ class GraphVisualizer {
         this.network = new vis.Network(this.graphComponent, graph, options);
     }
 
+    /**
+     * 
+     * @param {*} data 
+     */
     setCyclesResult(data) {
         console.info("Setting cycles result");
         this.cycles = data.paths;
@@ -62,16 +87,76 @@ class GraphVisualizer {
 
                 let that = this;
 
-                row.addEventListener("click", function() { that._selectPath(this, this._path); });
+                row.addEventListener("click", function() { that._selectPath(this._path); });
 
                 this.tableComponent.appendChild(row);
             }
         }
     }
 
-    _selectPath(component, path) {
+    /**
+     * 
+     * @param {*} toolbarComponent 
+     */
+    _createToolbarComponent(toolbarComponent) {
+        toolbarComponent.appendChild(this._createResetSelectionButton());
+        toolbarComponent.appendChild(this._createReorganizeButton());
+    }
 
-        let edgeIds = [];
+    /**
+     * 
+     */
+    _createReorganizeButton() {
+        return this._createButton("Configure auto layout", () => {
+
+            this.displayConfigPanel = !this.displayConfigPanel;
+
+            if (this.displayConfigPanel) {
+                this.configComponent.style.display = 'block';
+                this.graphComponent.style.width = 'calc(100% - 700px)';
+            } else {
+                this.configComponent.style.display = 'none';
+                this.graphComponent.style.width = '100%';
+            }
+
+        });
+    }
+
+    /**
+     * 
+     */
+    _createResetSelectionButton() {
+        return this._createButton("Reset selection", () => {
+            this.nodesDataSet.getIds().forEach(nodeId => this.nodesDataSet.update({ id: nodeId, color: { background: "#666666" } }));
+            this.edgesDataSet.getIds().forEach(edgeId => this.edgesDataSet.update({ id: edgeId, color: { color: "#838383" } }));
+        });
+    }
+
+    /**
+     * 
+     * @param {*} label 
+     * @param {*} listener 
+     */
+    _createButton(label, listener) {
+        let button = document.createElement("button");
+        let t = document.createTextNode(label);
+        button.appendChild(t);
+        button.addEventListener("click", listener);
+        return button;
+    }
+
+    /**
+     * 
+     * @param {*} path 
+     */
+    _selectPath(path) {
+
+        this._selectedPath = path;
+
+        const SELECTED_CYCLE_COLOR = "red";
+
+        this.nodesDataSet.getIds().forEach(nodeId => this.nodesDataSet.update({ id: nodeId, color: { background: "#666666" } }));
+        this.edgesDataSet.getIds().forEach(edgeId => this.edgesDataSet.update({ id: edgeId, color: { color: "#CCCCCC" } }));
 
         for (let i = 0; i < path.length; i++) {
 
@@ -81,11 +166,18 @@ class GraphVisualizer {
             let edgeId = this.edgesDataSet.get().filter(x => x.from === from && x.to === to).map(x => x.id)[0];
 
             if (edgeId) {
-                edgeIds.push(edgeId);
+                this.edgesDataSet.update({
+                    id: edgeId,
+                    color: { color: SELECTED_CYCLE_COLOR },
+                    smooth: {
+                        enabled: false
+                    }
+                });
             }
+
+            this.nodesDataSet.update({ id: from, color: { background: SELECTED_CYCLE_COLOR } });
         }
 
-        this.network.selectEdges(edgeIds);
     }
 
     _processData(newValue) {
