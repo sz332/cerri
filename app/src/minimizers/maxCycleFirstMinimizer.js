@@ -60,6 +60,10 @@ module.exports = class MaxCycleFirstMinimizer {
         return goodPaths;
     }
 
+    name(){
+        return "Max cycles first minimizer";
+    }
+
 
 
 }

@@ -189,6 +189,9 @@ module.exports = class AdvantageousMinimizer {
         }
     }
 
+    name(){
+        return "Advantageous minimizer";
+    }
 
 
 }

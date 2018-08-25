@@ -53,6 +53,10 @@ module.exports = class NaiveMinimizer {
         return goodPaths;
     }
 
+    name(){
+        return "Naive minimizer";
+    }
+
 
 
 }

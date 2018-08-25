@@ -17,14 +17,34 @@ const {
 
 module.exports = class Main {
 
-    constructor(maxCycleLength, dataDirLocation, graphFileName, exportFileName) {
+    constructor(maxCycleLength, dataDirLocation, graphFileName, exportFileName, minimizer) {
         this.config = {
             maxCycleLength,
             dataDirLocation,
             graphFileName,
-            exportFileName
+            exportFileName,
+            minimizer
         };
     }
+
+    _createMinimizer(minimizer) {
+
+        switch (minimizer) {
+            case 'naive':
+                return new NaiveMinimizer();
+                
+            case 'maxCycleFirst':
+                return new MaxCycleFirstMinimizer();
+
+            case 'advantageous':
+                return new AdvantageousMinimizer();
+
+            default:
+                return new NaiveMinimizer();
+        }
+
+    }
+
 
     /**
      * This is the main method of the application
@@ -36,6 +56,7 @@ module.exports = class Main {
         const DIR_LOCATION = path.resolve(this.config.dataDirLocation);
         const GRAPH_LOCATION = path.resolve(this.config.dataDirLocation, this.config.graphFileName);
         const EXPORT_LOCATION = path.resolve(this.config.exportFileName);
+        const MINIMIZER = this._createMinimizer(this.config.minimizer);
 
         // display argument informations
 
@@ -43,6 +64,7 @@ module.exports = class Main {
         console.info("Data directory: " + DIR_LOCATION);
         console.info("Graph file location: " + GRAPH_LOCATION);
         console.info("Output file location: " + EXPORT_LOCATION);
+        console.info("Minimizer algorithm: "  + MINIMIZER.name());
 
         // Start performance measurement
 
@@ -58,7 +80,7 @@ module.exports = class Main {
 
         // Among the cycles find the minimal amount which cover the whole graph using a provided algorithm
 
-        let minimalCycles = new GraphMinimizer(graph, new MaxCycleFirstMinimizer()).minimalCoveringCycles(cycles);
+        let minimalCycles = new GraphMinimizer(graph, MINIMIZER).minimalCoveringCycles(cycles);
 
         // Display statistics about the graph
         let statistics = new GraphStatistics(graph, minimalCycles.paths);

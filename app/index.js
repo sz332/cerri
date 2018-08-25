@@ -15,7 +15,7 @@ class App {
 
     run() {
         let args = this._parseArguments();
-        let main = new Main(args.maxCycleLength, args.dataDir, args.graphFileName, args.export);
+        let main = new Main(args.maxCycleLength, args.dataDir, args.graphFileName, args.export, args.minimizer);
         main.run();
     }
 
@@ -53,6 +53,14 @@ class App {
                 defaultValue: 'graph.pdf'
             }
         );
+
+        parser.addArgument(
+            '--minimizer', {
+                help: 'The cycle minimizer algorithm',
+                defaultValue: 'advantageous',
+                choices: ['naive', 'maxCycleFirst', 'advanageous']
+            }
+        )
 
         return parser.parseArgs();
     }
