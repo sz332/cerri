@@ -68,19 +68,19 @@ module.exports = class GraphMinimizer {
             originalSize: cycles.length
         }
 
-        // FIXME rename this to something more telling, and handle the case when there are remaining edges as well...
-        let goodPaths = this.algorithm.minimize(graph, cycles, filter);
+        let result = this.algorithm.minimize(graph, cycles, filter);
 
-        console.log("Found minimal number of cycles, cycle count = " + goodPaths.length);
+        console.log("Found minimal number of cycles, cycle count = " + result.paths.length);
 
         // minimalize the number of paths
 
-        info.minimizedSize = goodPaths.length;
+        info.minimizedSize = result.paths.length;
 
         // return the paths, and the remaining edges, if any
         return {
-            paths: this._groupPathsBySize(goodPaths),
-            info: info
+            paths: this._groupPathsBySize(result.paths),
+            info: info,
+            remainingEdges: result.remainingEdges
         };
     }
 

@@ -8,17 +8,17 @@ module.exports = class GraphStatistics {
      * 
      * @param {Graph} graph 
      */
-    constructor(graph, cycles) {
+    constructor(graph, cyclesResult) {
         this.graph = graph;
-        this.cycles = cycles;
+        this.cyclesResult = cyclesResult;
     }
 
-    _getCycleGoodness() {
+    _getCycleGoodness(cycles) {
         let graphEdgeCount = this.graph.edgeCount();
 
         let allCycles = [];
 
-        for (let cycleGroup of this.cycles) {
+        for (let cycleGroup of cycles) {
             allCycles.push(...cycleGroup.data);
         }
 
@@ -40,7 +40,7 @@ module.exports = class GraphStatistics {
 
         console.info("\n ======== Goodness statistics ================");
 
-        let cycleGoodness = this._getCycleGoodness(this.cycles);
+        let cycleGoodness = this._getCycleGoodness(this.cyclesResult.paths);
 
         console.log("Edge count in graph = " + cycleGoodness.graphEdgeCount);
         console.log("Edge count in cycles = " + cycleGoodness.cyclesEdgeCount);
@@ -57,12 +57,23 @@ module.exports = class GraphStatistics {
 
         console.info("\n ======== Exercises ================");
 
-        for (let pathObject of this.cycles) {
+        for (let pathObject of this.cyclesResult.paths) {
             console.log("\n Exercises of " + pathObject.length + " moves: \n");
             let counter = 1;
             for (let path of pathObject.data) {
                 console.info(counter++ + ". " + path.join(", "));
             }
+        }
+
+        if (this.cyclesResult.remainingEdges.length > 0) {
+
+            console.error("\nThe following moves are *not* present in exercises, because they were not part of any cycle:");
+
+            for (let edge of this.cyclesResult.remainingEdges) {
+                console.error(edge.v + " -> " + edge.w);
+            }
+            
+            console.error("Try to increase maxCycleLength using the program argument, and restart the application!");
         }
 
         console.info("\n");

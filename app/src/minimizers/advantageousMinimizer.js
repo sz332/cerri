@@ -1,6 +1,5 @@
 'use strict';
 
-let RemainingFinder = require("./remainingFinder.js");
 let Graph = require("graphlib").Graph;
 
 module.exports = class AdvantageousMinimizer {
@@ -13,19 +12,19 @@ module.exports = class AdvantageousMinimizer {
      * @param {Array} cycles The cycles we want to check
      * @param {Array} filter Filter to be applied to each circle. Returns true, if the circle needs to be processed.
      */
-    minimize(graph, cycles, filter) {
+    minimize(graph, newCycles, filter) {
 
-        let max = cycles.map(x => x.length).reduce((acc, x) => Math.max(acc, x));
+        let max = newCycles.map(x => x.length).reduce((acc, x) => Math.max(acc, x));
 
         let goodPaths = [];
 
-        let paths = cycles.map(path => ({ original: path, edges: path.map((node, i, array) => ({ v: node, w: array[(i + 1) % array.length] })) }));
+        let cycles = newCycles.map(path => ({ original: path, edges: path.map((node, i, array) => ({ v: node, w: array[(i + 1) % array.length] })) }));
 
         let edgeCountMap = {};
 
         // calculate the number of every edge used in a cycle
 
-        for (let cycle of cycles) {
+        for (let cycle of newCycles) {
             for (let i = 0; i < cycle.length; i++) {
                 let k = cycle[i] + ":" + (i == cycle.length - 1 ? cycle[0] : cycle[i + 1]);
 
@@ -75,7 +74,7 @@ module.exports = class AdvantageousMinimizer {
 
                 if (edgeCountMap[min_k] == 1) {
                     found = true;
-                    for (let path of paths) {
+                    for (let path of cycles) {
                         for (let i = 0; i < path.edges.length; i++) {
                             let k = path.edges[i].v + ":" + path.edges[i].w;
                             if (min_k == k) {
@@ -103,7 +102,7 @@ module.exports = class AdvantageousMinimizer {
 
                 if (edgeCountMap[minK] == minOccurance) {
                     // this is an edge that is occurring only a few times
-                    for (let path of paths) {
+                    for (let path of cycles) {
 
                         if (!filter(path.original)) {
                             continue;
@@ -135,15 +134,15 @@ module.exports = class AdvantageousMinimizer {
                 continue;
             }
 
-            for (let path of paths) {
+            for (let cycle of cycles) {
 
-                if (!filter(path.original)) {
+                if (!filter(cycle.original)) {
                     continue;
                 }
 
-                if (max === this._pathEdgeCount(graph, path)) {
+                if (max === this._pathEdgeCount(graph, cycle)) {
                     found = true;
-                    this._removeEdges(graph, path, goodPaths, edgeCountMap);
+                    this._removeEdges(graph, cycle, goodPaths, edgeCountMap);
                 }
             }
 
@@ -152,12 +151,10 @@ module.exports = class AdvantageousMinimizer {
             }
         }
 
-        if (graph.edgeCount() > 0) {
-            let finder = new RemainingFinder(cycles, graph.edges());
-            finder.print();
-        }
-
-        return goodPaths;
+        return {
+            paths: goodPaths,
+            remainingEdges: graph.edges()   
+        };
     }
 
     _pathEdgeCount(graph, path) {

@@ -1,7 +1,6 @@
 'use strict';
 
 let Graph = require("graphlib").Graph;
-let RemainingFinder = require("./remainingFinder.js");
 
 module.exports = class MaxCycleFirstMinimizer {
 
@@ -12,33 +11,33 @@ module.exports = class MaxCycleFirstMinimizer {
      * in the graph.
      * 
      * @param {Graph} graph The clone of the original graph
-     * @param {Array} cycles The cycles we want to check
+     * @param {Array} paths The cycles we want to check
      * @param {Array} filter Filter to be applied to each circle. Returns true, if the circle needs to be processed.
      */
-    minimize(graph, cycles, filter) {
+    minimize(graph, paths, filter) {
 
-        let max = cycles.map(x => x.length).reduce((acc, x) => Math.max(acc, x));
+        let max = paths.map(x => x.length).reduce((acc, x) => Math.max(acc, x));
 
         let goodPaths = [];
 
-        let paths = cycles.map(path => ({ original: path, edges: path.map((node, i, array) => ({ v: node, w: array[(i + 1) % array.length] })) }));
+        let cycles = paths.map(path => ({ original: path, edges: path.map((node, i, array) => ({ v: node, w: array[(i + 1) % array.length] })) }));
 
         while ((graph.edgeCount() > 0) && (max !== 0)) {
 
             let found = false;
 
-            for (let path of paths) {
+            for (let cycle of cycles) {
 
-                if (!filter(path.original)) {
+                if (!filter(cycle.original)) {
                     continue;
                 }
 
-                let edgeCount = path.edges.filter(edge => graph.hasEdge(edge)).length;
+                let edgeCount = cycle.edges.filter(edge => graph.hasEdge(edge)).length;
 
                 if (edgeCount === max) {
                     found = true;
-                    path.edges.filter(edge => graph.hasEdge(edge)).forEach(edge => graph.removeEdge(edge));
-                    goodPaths.push(path.original);
+                    cycle.edges.filter(edge => graph.hasEdge(edge)).forEach(edge => graph.removeEdge(edge));
+                    goodPaths.push(cycle.original);
 
                     if (!graph.hasEdge()) {
                         break;
@@ -52,12 +51,10 @@ module.exports = class MaxCycleFirstMinimizer {
             }
         }
 
-        if (graph.edgeCount() > 0) {
-            let finder = new RemainingFinder(cycles, graph.edges());
-            finder.print();
-        }
-
-        return goodPaths;
+        return {
+            paths: goodPaths,
+            remainingEdges: graph.edges()   
+        };
     }
 
     name(){

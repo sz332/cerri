@@ -78,18 +78,16 @@ module.exports = class Main {
         // Find the cycles
         let cycles = new GraphCycleFinder(graph).findCycles(MAX_CYCLE_LENGTH);
 
-        // Among the cycles find the minimal amount which cover the whole graph using a provided algorithm
-
-        // FIXME this one is not nice yet, need to return remaining edges as well...
-        let minimalCycles = new GraphMinimizer(graph, MINIMIZER).minimalCoveringCycles(cycles);
+        // Among the cycles find the minimal amount which cover the whole graph using a provided algorithm, also get the remaining edges
+        let minimalCyclesResult = new GraphMinimizer(graph, MINIMIZER).minimalCoveringCycles(cycles);
 
         // Display statistics about the graph
-        let statistics = new GraphStatistics(graph, minimalCycles.paths);
+        let statistics = new GraphStatistics(graph, minimalCyclesResult);
         statistics.printExercises();
         statistics.printCycleGoodness();
 
         // generate pdf
-        let generator = new PdfGenerator(data.data.nodes, minimalCycles.paths.map(x => x.data).reduce((a, b) => a.concat(b), []), DIR_LOCATION);
+        let generator = new PdfGenerator(data.data.nodes, minimalCyclesResult.paths.map(x => x.data).reduce((a, b) => a.concat(b), []), DIR_LOCATION);
         generator.generate(EXPORT_LOCATION);
 
         // Display time spent for calculating the result

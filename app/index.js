@@ -1,7 +1,4 @@
-// TODO
-
-// Use modular folder structure for various parts: graph loaders, graph parsers, graph transformations, graph statistics, graph exporters, etc.
-// ...
+// TODO Use modular folder structure for various parts: graph loaders, graph parsers, graph transformations, graph statistics, graph exporters, etc.
 
 // This is an application format of the drill generator. The reason the application
 // was developed is because the current solution was very slow, so slow, that it

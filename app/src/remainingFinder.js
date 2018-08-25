@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * This class is not used anymore, content was merged into graphStatistics.js ... TODO remove it or reuse parts of it
+ */
 module.exports = class RemainingFinder {
 
     /**
