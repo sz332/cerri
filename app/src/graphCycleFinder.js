@@ -54,7 +54,6 @@ module.exports = class GraphCycleFinder {
                     console.info("Found a cycle, path = " + path + " # of cycles = " + result.length);
                 }
 
-                let key = path.slice(0).sort().join(":")
                 path.push(current);
                 result.push(path);
 
@@ -150,6 +149,6 @@ module.exports = class GraphCycleFinder {
         };
 
         return result.map(x => x.original);
-    };
+    }
 
 }
