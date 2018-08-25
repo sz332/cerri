@@ -4,11 +4,12 @@ var GraphLoader = require("./graphLoader.js");
 var GraphCycleFinder = require("./graphCycleFinder.js");
 var GraphMinimizer = require("./graphMinimizer.js");
 var GraphStatistics = require("./graphStatistics.js");
-var GraphCycleSorter = require("./graphCycleSorter.js");
 var AdvantageousMinimizer = require("./minimizers/advantageousMinimizer.js");
 var MaxCycleFirstMinimizer = require("./minimizers/maxCycleFirstMinimizer.js");
 var NaiveMinimizer = require("./minimizers/naiveMinimizer.js");
 var PdfGenerator = require("./pdfGenerator.js");
+var GraphVisualizer = require("./graphVisualizer.js");
+
 var path = require('path');
 
 const {
@@ -32,7 +33,7 @@ module.exports = class Main {
         switch (minimizer) {
             case 'naive':
                 return new NaiveMinimizer();
-                
+
             case 'maxCycleFirst':
                 return new MaxCycleFirstMinimizer();
 
@@ -64,7 +65,7 @@ module.exports = class Main {
         console.info("Data directory: " + DIR_LOCATION);
         console.info("Graph file location: " + GRAPH_LOCATION);
         console.info("Output file location: " + EXPORT_LOCATION);
-        console.info("Minimizer algorithm: "  + MINIMIZER.name());
+        console.info("Minimizer algorithm: " + MINIMIZER.name());
 
         // Start performance measurement
 
@@ -93,6 +94,15 @@ module.exports = class Main {
         // Display time spent for calculating the result
         let duration = performance.now() - start;
         console.info("Ended in " + (duration / 1000) + " sec");
+
+        let graphVisualizer = new GraphVisualizer(graph, minimalCyclesResult, { 
+            port: 8080, 
+            staticDirLocation: path.join(__dirname, '..', 'static'),
+            modulesDirLocation: path.join(__dirname, '..', 'node_modules'),
+            graphLocation: GRAPH_LOCATION
+         });
+
+        graphVisualizer.visualize();
     }
 
 }

@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Network | Basic usage</title>
+
+    <script type="text/javascript" src="/node_modules/vis/dist/vis.js"></script>
+    <script type="text/javascript" src="graph.js"></script>
+
+    <link href="/node_modules/vis/dist/vis-network.min.css" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+        #graph {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="graph"></div>
+
+    <script type="text/javascript">
+        let graphVisualizer = new GraphVisualizer(document.getElementById("graph"));
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('GET', 'graph.json');
+
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                graphVisualizer.initGraph(JSON.parse(xhr.responseText));
+            }
+        };
+
+        xhr.send();
+    </script>
+
+
+</body>
+
+</html>
