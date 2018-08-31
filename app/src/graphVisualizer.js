@@ -9,16 +9,16 @@ module.exports = class GraphVisualizer {
 
     /**
      * Visualize the graph by starting a web server
-     * @param {Graph} graph 
-     * @param {Array} cyclesResult
+     * @param {Object} graphData - The graph data
+     * @param {Array} cyclesResult - The cycles to be displayed
      * @param {Object} config - The configuration
      * @param {number} config.port - The port where the webserver shall listen
      * @param {string} config.staticDirLocation - The location where the json data will be exported
      * @param {string} config.modulesDirLocation - Node modules directory location
      * @param {string} config.graphLocation - The graph filename location
      */
-    constructor(graph, cyclesResult, config) {
-        this.graph = graph;
+    constructor(graphData, cyclesResult, config) {
+        this.graphData = graphData;
         this.cyclesResult = cyclesResult;
         this.config = config;
     }
@@ -30,9 +30,14 @@ module.exports = class GraphVisualizer {
         // start http server
         const app = express();
         app.use(express.static(this.config.staticDirLocation));
-        app.use("/graph.json", express.static(this.config.graphLocation));
+
+        app.get("/graph.json", (req, resp, next) => {
+            resp.setHeader('Content-Type', 'application/json');
+            resp.send(JSON.stringify(this.graphData.data));
+        });
+
         app.use("/node_modules", express.static(this.config.modulesDirLocation));
-        app.listen(this.config.port, () => console.log('HTTP server started on port ' + this.config.port + "!"));
+        app.listen(this.config.port, () => console.log('Access local webserver on  http://localhost:' + this.config.port + ""));
     }
 
 }

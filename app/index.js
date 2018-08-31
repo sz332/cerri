@@ -12,7 +12,14 @@ class App {
 
     run() {
         let args = this._parseArguments();
-        let main = new Main(args.maxCycleLength, args.dataDir, args.graphFileName, args.export, args.minimizer);
+        let main = new Main(args.maxCycleLength,
+            args.dataDir,
+            args.graphFileName,
+            args.export,
+            args.minimizer,
+            args.removeNodes === "" ? [] : args.removeNodes.split(",").map(x => x.trim())
+        );
+
         main.run();
     }
 
@@ -57,7 +64,14 @@ class App {
                 defaultValue: 'advantageous',
                 choices: ['naive', 'maxCycleFirst', 'advanageous']
             }
-        )
+        );
+
+        parser.addArgument(
+            '--removeNodes', {
+                help: 'Remove the provided node before optimization. Usable in case we would like to limit the drills to certain actions. Separate the nodes with comma "," character.',
+                defaultValue: ''
+            }
+        );
 
         return parser.parseArgs();
     }

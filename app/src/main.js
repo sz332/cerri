@@ -18,13 +18,14 @@ const {
 
 module.exports = class Main {
 
-    constructor(maxCycleLength, dataDirLocation, graphFileName, exportFileName, minimizer) {
+    constructor(maxCycleLength, dataDirLocation, graphFileName, exportFileName, minimizer, removeNodes) {
         this.config = {
             maxCycleLength,
             dataDirLocation,
             graphFileName,
             exportFileName,
-            minimizer
+            minimizer,
+            removeNodes
         };
     }
 
@@ -73,8 +74,14 @@ module.exports = class Main {
 
         // Load the graph
 
-        let data = new GraphLoader(GRAPH_LOCATION).load();
-        let graph = data.graph;
+        let graphData = new GraphLoader(GRAPH_LOCATION).load();
+        let graph = graphData.graph;
+
+        if (this.config.removeNodes.length > 0) {
+            console.log("Removing nodes from graph: " + this.config.removeNodes);
+            this.config.removeNodes.forEach(node => graph.removeNode(node));
+            graphData.data.nodes = graphData.data.nodes.filter( x => this.config.removeNodes.indexOf(x.id) === -1 );
+        }
 
         // Find the cycles
         let cycles = new GraphCycleFinder(graph).findCycles(MAX_CYCLE_LENGTH);
@@ -88,19 +95,19 @@ module.exports = class Main {
         statistics.printCycleGoodness();
 
         // generate pdf
-        let generator = new PdfGenerator(data.data.nodes, minimalCyclesResult.paths.map(x => x.data).reduce((a, b) => a.concat(b), []), DIR_LOCATION);
+        let generator = new PdfGenerator(graphData.data.nodes, minimalCyclesResult.paths.map(x => x.data).reduce((a, b) => a.concat(b), []), DIR_LOCATION);
         generator.generate(EXPORT_LOCATION);
 
         // Display time spent for calculating the result
         let duration = performance.now() - start;
         console.info("Ended in " + (duration / 1000) + " sec");
 
-        let graphVisualizer = new GraphVisualizer(graph, minimalCyclesResult, { 
-            port: 8080, 
+        let graphVisualizer = new GraphVisualizer(graphData, minimalCyclesResult, {
+            port: 8080,
             staticDirLocation: path.join(__dirname, '..', 'static'),
             modulesDirLocation: path.join(__dirname, '..', 'node_modules'),
             graphLocation: GRAPH_LOCATION
-         });
+        });
 
         graphVisualizer.visualize();
     }

@@ -84,7 +84,7 @@ module.exports = class AdvantageousMinimizer {
                         }
                     }
                 }
-            }
+            }   
 
             if (found) {
                 continue;
