@@ -85,6 +85,16 @@
             "image": "images/facethrust-small.png"
         },
         {
+            "id": "insideThrust",
+            "label": "Inside thrust",
+            "image": "images/facethrust-small.png"
+        },
+        {
+            "id": "outsideThrust",
+            "label": "Outside thrust",
+            "image": "images/facethrust-small.png"
+        },
+        {
             "id": "outsideFaceBlow",
             "label": "Outside face blow",
             "image": "images/outsidefaceblow-small.png"
