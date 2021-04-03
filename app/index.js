@@ -40,7 +40,7 @@ class App {
         parser.addArgument(
             '--dataDir', {
                 help: 'Data directory where the graph description file reside',
-                defaultValue: '../data/cerri'
+                defaultValue: '../data/leboucher'
             }
         );
 
@@ -61,7 +61,7 @@ class App {
         parser.addArgument(
             '--minimizer', {
                 help: 'The cycle minimizer algorithm',
-                defaultValue: 'advantageous',
+                defaultValue: 'naive',
                 choices: ['naive', 'maxCycleFirst', 'advanageous']
             }
         );
@@ -77,6 +77,7 @@ class App {
     }
 
 }
+
 
 // [ Application starts here ]----------------------------------------------------------------------
 

@@ -100,7 +100,7 @@
         },
         {
             "from": "insideFaceBlow",
-            "toList": ["quarteParry"]
+            "toList": ["quarteParry", "primeParry"]
         },
         {
             "from": "quarteParry",
@@ -116,7 +116,7 @@
         },
         {
             "from": "insideFaceBlow",
-            "toList": ["primeParry"]
+            "toList": ["primeParry","quarteParry"]
         },
         {
             "from": "primeParry",
@@ -128,7 +128,7 @@
         },
         {
             "from": "kidneyParry",
-            "toList": ["headBlow", "insideFaceBlow", "kidneyBlow", "insideLegBlow", "flankBlow"]
+            "toList": ["headBlow", "insideFaceBlow","insideLegBlow", "flankBlow"]
         },
         {
             "from": "flankBlow",
@@ -136,7 +136,7 @@
         },
         {
             "from": "flankParry",
-            "toList": ["headBlow", "insideFaceBlow", "flankBlow", "outsideLegBlow"]
+            "toList": ["headBlow", "insideFaceBlow", "flankBlow"]
         },
         {
             "from": "outsideLegBlow",
@@ -160,14 +160,18 @@
         },
         {
             "from": "risingParry",
-            "toList": ["faceThrust"]
+            "toList": ["faceThrust", "insideThrust", "outsideThrust"]
         },
         {
             "from": "faceThrust",
+            "toList": ["quarteParry", "tierceParry"]
+        },
+        {
+            "from": "insideThrust",
             "toList": ["quarteParry"]
         },
         {
-            "from": "faceThrust",
+            "from": "outsideThrust",
             "toList": ["tierceParry"]
         }
     ]
